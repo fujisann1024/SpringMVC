@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AppMemberListController {
 	
-	@GetMapping("app-member")
+	@GetMapping("app-member/list")
 	public String GetAppMember(Model model) {
 		model.addAttribute("msg","タイムリーフ");
 		return "appMember/list";
