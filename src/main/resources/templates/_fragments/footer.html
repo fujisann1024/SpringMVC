@@ -1,0 +1,11 @@
+<!-- templates/_fragments/footer.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+  <th:block th:fragment="footer">
+    <div>
+      <p>&copy; [[${T(java.time.Year).now().value}]] MyApp</p>
+    </div>
+  </th:block>
+</body>
+</html>

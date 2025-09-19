@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, content, scripts)">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="${title}">App</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+	<header th:replace="~{_fragments/header :: header}">header</header>
+	<main th:replace="${content}">content</main>
+	<footer th:replace="~{_fragments/footer :: footer}">footer</footer>
+	<script th:src="@{/js/main.js}" defer></script>
+	<th:block th:replace="${scripts}"></th:block>
+</body>
+</html>

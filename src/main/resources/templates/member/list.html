@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{_layouts/default :: layout(~{::title}, ~{::main}, ~{::script})}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>会員一覧画面</title>
 
 </head>
 <body>
+	<main>
 	<h1 th:text="${msg}">表示される部分</h1>
+	</main>
+	<script></script>
 </body>
 </html>
