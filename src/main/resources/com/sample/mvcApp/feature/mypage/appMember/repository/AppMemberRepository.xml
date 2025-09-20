@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sample.mvcApp.feature.mypage.appMember.repository.AppMemberRepository">
+	<select id="getAppMemberOutEntityList"
+		resultType="com.sample.mvcApp.feature.mypage.appMember.entity.AppMemberOutEntity">
+		SELECT
+		family_name as familyName
+		,given_name as givenName
+		,prefecture
+		,gender
+		,birthday
+		FROM todo.app_member
+		ORDER BY joined_on ASC
+		LIMIT #{ e.limit }
+		OFFSET #{ e.offset }
+	</select>
+</mapper>

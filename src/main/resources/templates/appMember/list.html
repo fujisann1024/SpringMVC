@@ -8,7 +8,40 @@
 </head>
 <body>
 	<main>
-	<h1 th:text="${msg}">表示される部分</h1>
+		<h1 th:text="${msg}">表示される部分</h1>
+		
+		<h2>会員一覧</h2>
+		
+		<!-- 件数表示 -->
+		<p th:if="${appMembers != null}">
+		  全 <strong th:text="${#lists.size(appMembers)}">0</strong> 件
+		</p>
+		
+		<!-- 一覧テーブル -->
+		<table>
+		  <thead>
+		    <tr>
+		      <th>名前</th>
+		      <th>都道府県</th>
+		      <th>性別</th>
+		      <th>誕生日</th>
+		      <th>年齢</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:if="${#lists.isEmpty(appMembers)}">
+		      <td colspan="5">データがありません</td>
+		    </tr>
+		
+		    <tr th:each="m : ${appMembers}">
+		      <td th:text="${m.fullName}">山田　太郎</td>
+		      <td th:text="${m.prefecture}">東京都</td>
+		      <td th:text="${m.gender}">男性</td>
+		      <td th:text="${m.birthday}">1990年1月1日</td>
+		      <td th:text="${m.age}">35</td>
+		    </tr>
+		  </tbody>
+		</table>
 	</main>
 	<script></script>
 </body>
