@@ -36,7 +36,7 @@ class AppMemberServiceTest {
 
 	@Test
 	@DisplayName("正常系: Repository結果をDTOへマップして返す & offset/limit=0/15 で呼び出す")
-	void 正常系_リストが返る() {
+	void testgetAppMemberOutEntityList1() {
 
 		var entityList = List.of(
 				new AppMemberOutEntity().builder()
@@ -78,7 +78,7 @@ class AppMemberServiceTest {
 		assertThat(captured.getOffset()).isEqualTo(0);
 		assertThat(captured.getLimit()).isEqualTo(15);
 
-		// DTOへマッピングできていること（フィールド名に合わせて検証を足してください）
+		// DTOへマッピングできていること
 		assertThat(result)
 				.extracting(
 						AppMemberOutDto::getMemberId, AppMemberOutDto::getEmail, AppMemberOutDto::getPassword,
@@ -114,7 +114,7 @@ class AppMemberServiceTest {
 
 	@Test
 	@DisplayName("境界系: Repositoryが空リストを返したら空リストを返す")
-	void 空リスト() {
+	void testgetAppMemberOutEntityList2() {
 		// given
 		given(repository.getAppMemberOutEntityList(any(AppMemberInEntity.class)))
 				.willReturn(List.of());
