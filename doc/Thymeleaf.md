@@ -1,5 +1,12 @@
 # Thymeleaf
 
+## ウェルカムページ
+
+下記の順番でデフォルトのウェルカムページになる
+
+1. src/main/resources/static/index.html
+2. src/main/resources/templates/index.html
+
 ## 共通化
 
 | 種類        | 内容                                                           |
@@ -12,3 +19,12 @@
 - ![イメージ1](./img/thymeleaf1.drawio.png)
 - タグの置き換え、置換
 - ![イメージ2](./img/thymeleaf2.drawio.png)
+
+## クラス属性の操作
+
+| 種類           | 内容                                                                            |
+| :------------- | :------------------------------------------------------------------------------ |
+| th:classappend | 既存の class 属性の末尾に CSS クラスを追加します                                |
+| th:attrappend  | 任意の属性値に文字列を追記 data-_ や aria-_、title 等、汎用属性への追記に使える |
+
+## ウェルカムページ

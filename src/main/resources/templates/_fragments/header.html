@@ -1,8 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-  <th:block th:fragment="header">
-    <div><a th:href="@{/}">Home</a></div>
+	<!-- 個別画面のHTMLタグからdefault.html経由で受け取ったactiveが画面で表示された場合
+		 ナビボタンを活性化する */-->
+  <th:block class="l-header" th:fragment="appHeader(active)">
+	<div class="l-header__inner">
+	    <a class="c-brand" th:href="@{/}">MyApp</a>
+	    <nav class="c-nav" aria-label="Primary">
+	      <ul class="c-nav__list">
+	        <li class="c-nav__item">
+	          <a class="c-nav__link" th:href="@{/}"
+	             th:classappend="${active}=='home' ? ' is-current' : null"
+	             th:attrappend="aria-current=${active}=='home' ? 'page' : null">Home</a>
+	        </li>
+	        <li class="c-nav__item">
+	          <a class="c-nav__link" th:href="@{/mypage/app-member/list}"
+	             th:classappend="${active}=='appMember' ? ' is-current' : null"
+	             th:attrappend="aria-current=${active}=='appMember' ? 'page' : null">会員一覧画面</a>
+	        </li>
+	        <li class="c-nav__item">
+	          <a class="c-nav__link" th:href="@{/pricing}"
+	             th:classappend="${active}=='pricing' ? ' is-current' : null"
+	             th:attrappend="aria-current=${active}=='pricing' ? 'page' : null">Pricing</a>
+	        </li>
+	        <li class="c-nav__item">
+	          <a class="c-nav__link" th:href="@{/contact}"
+	             th:classappend="${active}=='contact' ? ' is-current' : null"
+	             th:attrappend="aria-current=${active}=='contact' ? 'page' : null">Contact</a>
+	        </li>
+	      </ul>
+	    </nav>
+	  </div>
   </th:block>
 </body>
 </html>
