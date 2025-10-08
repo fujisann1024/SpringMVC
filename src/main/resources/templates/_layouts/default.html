@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, content, scripts)">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, content, active, scripts)">
 <head>
   <meta charset="UTF-8">
   <title th:replace="${title}">App</title>
+  <link rel="stylesheet" th:href="@{/css/reset.css}">
+  <link rel="stylesheet" th:href="@{/css/theme/theme.css}">
+  <link rel="stylesheet" th:href="@{/css/layout/header.css}" />
+  <link rel="stylesheet" th:href="@{/css/module/nav.css}" />
   <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-	<header th:replace="~{_fragments/header :: header}">header</header>
+	<header th:replace="~{_fragments/header :: appHeader(${active})}">header</header>
 	<main th:replace="${content}">content</main>
 	<footer th:replace="~{_fragments/footer :: footer}">footer</footer>
 	<script th:src="@{/js/main.js}" defer></script>

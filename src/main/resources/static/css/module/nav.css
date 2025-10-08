@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+/* ロゴの強調 */
+.c-brand {
+	font-weight: 1000;
+	letter-spacing: .2px;
+	color: var(--brand-text);
+}
+
+/* ナビの横並びと整列 */
+.c-nav__list {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+/*<li> の行頭マーカー（黒丸など）を消す*/
+.c-nav__item {
+	list-style: none;
+}
+
+.c-nav__link {
+	display: inline-flex; /*内部はフレックスで中央寄せ*/
+	align-items: center;
+	justify-content: center;
+	padding: 8px 12px;
+	border-radius: 10px;
+	color: var(--nav-text);
+	transition: background-color .2s ease, color .2s ease; /*ホバー/アクティブの色変化を滑らかに*/
+}
+
+/*ホバー時*/
+.c-nav__link:hover {
+	background: var(--nav-hover-bg);
+}
+
+/*現在の画面の位置*/
+.c-nav__link[aria-current="page"] {
+	background: var(--nav-active-bg);
+    color: var(--nav-active-fg);
+}
+
+/*640px 以下*/
+@media (max-width: 640px) {
+
+	.c-nav__list {
+		justify-content: space-between;
+	}
+}
