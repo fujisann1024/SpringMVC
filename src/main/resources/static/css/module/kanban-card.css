@@ -1,0 +1,20 @@
+@charset "UTF-8";
+.c-kanban-card {
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: var(--card-shadow);
+}
+
+.c-task-card__title { 
+	margin: 0; 
+	font-size: 1rem; 
+	color: var(--text); 
+}
+
+.c-task-card__time { 
+	font-variant-numeric: tabular-nums; 
+	color: var(--muted); 
+}
+

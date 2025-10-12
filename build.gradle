@@ -28,6 +28,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
+	implementation "org.webjars:jquery:3.7.1"
+    implementation "org.webjars:webjars-locator-core"
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
@@ -42,6 +44,7 @@ dependencies {
     testImplementation 'com.github.database-rider:rider-junit5:1.44.0:jakarta'
     testImplementation 'com.github.database-rider:rider-core:1.44.0:jakarta'
     testImplementation 'org.apache.poi:poi-ooxml:5.2.5'  // Excel(xlsx) 読み込み
+    
 }
 
 tasks.named('test') {

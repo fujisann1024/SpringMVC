@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{_layouts/default :: layout(~{::title}, ~{::main}, 'taskList' , ~{::script})}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスクボード画面</title>
+
+</head>
+
+<body>
+	<main>
+		<div class="l-kanban">
+			<!-- 日付ごと */-->
+			<section class="l-kanban__section" th:each="entry : ${taskSummaryMaps.entrySet()}">
+				<h2 class="l-kanban__heading" th:text="${#temporals.format(entry.key,'MM/dd') }">10/11</h2>
+
+				<ul class="l-kanban__list">
+					<!-- 1タスク */-->
+					<li th:each="task : ${entry.value}">
+						<article class="c-kanban-card" th:attr="data-group-id=${task.groupId}">
+
+							<h3 class="c-kanban-card__title" th:text="${task.title}">朝活動</h3>
+							<div class="c-kanban-card__time" th:text="${task.startTime} + ' – ' + ${task.endTime}">7:00
+								– 9:00</div>
+
+							<span class="c-badge c-badge--kind" th:text="${task.taskKind}">定期作業</span>
+							<span class="c-badge" th:classappend="' c-badge--priority-' + ${task.priority}"
+								th:text="${task.priority}">高</span>
+						</article>
+					</li>
+				</ul>
+				<button class="c-btn c-btn--outline c-btn--block js-open-modal" th:data-date="${entry.key}">
+					<span class="c-btn__icon" aria-hidden="true">＋</span>
+					<span>新規ワーク</span>
+				</button>
+				<!--		新規ワークボタン押下時に開くダイアログ		*/-->
+				<dialog id="newWorkDialog" class="c-modal" aria-labelledby="newWorkTitle"
+					aria-describedby="newWorkDesc">
+					<form method="post" th:action="@{/mypage/task/new}" th:object="${taskGroupCreateForm}">
+						<h2 id="newWorkTitle">新規ワークを作成</h2>
+						<p id="newWorkDesc">タスクの詳細を入力して作成します。</p>
+
+						<!-- クリック元から日付を埋め替える */-->
+						<input id="newWorkDate" type="hidden" th:field="*{targetYmd}">
+
+						<!--ラベル左 / 入力右（ワイヤーの2列）*/-->
+						<div class="c-modal-form-grid">
+
+							<label for="title">タスク名</label>
+							<input id="title" type="text" th:field="*{title}" required>
+
+
+							<label for="plannedEnd">予定開始時間</label>
+							<input id="plannedStart" type="time" th:field="*{plannedStart}" required>
+
+
+							<label for="plannedEnd">予定終了時間</label>
+							<input id="plannedEnd" type="time" th:field="*{plannedEnd}" required>
+
+
+							<label for="priority">優先度</label>
+							<select id="priority" th:field="*{priority}">
+								<option value="高">高</option>
+								<option value="中">中</option>
+								<option value="低">低</option>
+							</select>
+
+							<label for="taskKind">タスクの種類</label>
+							<select id="taskKind" th:field="*{taskKind}">
+								<option value="仕事">仕事</option>
+								<option value="定期作業">定期作業</option>
+								<option value="その他">その他</option>
+							</select>
+
+
+							<label for="explanation">説明</label>
+							<textarea id="explanation" rows="4" th:field="*{explanation}"></textarea>
+
+						</div>
+						<div class="c-modal__actions">
+							<button type="button" class="c-btn js-close-modal" value="cancel"
+								formmethod="dialog">キャンセル</button>
+
+							<button type="submit" class="c-btn c-btn--outline">
+								作成する
+							</button>
+						</div>
+					</form>
+				</dialog>
+			</section>
+		</div>
+
+
+
+	</main>
+	<script>
+		$(function () {
+			const $dialog = $('#newWorkDialog');
+			const dialogEl = $dialog[0];              // HTMLDialogElement を取得
+			const $dateInput = $('#newWorkDate');
+
+			// 開く
+			$(document).on('click', '.js-open-modal', function (e) {
+				e.preventDefault();
+				const date = $(this).data('date') || '';
+				$dateInput.val(date);          // ← hidden に代入
+
+				if (!dialogEl.open) dialogEl.showModal(); // モーダルで表示
+			});
+
+			// 閉じる
+			$(document).on('click', '.js-close-modal', function (e) {
+				e.preventDefault();
+
+				if (dialogEl.open) dialogEl.close(); // モーダルを閉じる
+			});
+
+
+			// バックドロップクリックで閉じる
+			$dialog.on('click', function (e) {
+				const r = this.getBoundingClientRect();
+				const outside = e.clientX < r.left || e.clientX > r.right ||
+					e.clientY < r.top || e.clientY > r.bottom;
+				if (outside) this.close('backdrop');
+			});
+
+
+		});
+	</script>
+
+</body>
+
+</html>
