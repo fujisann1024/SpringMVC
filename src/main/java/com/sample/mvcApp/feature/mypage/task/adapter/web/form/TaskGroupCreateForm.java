@@ -1,5 +1,6 @@
 package com.sample.mvcApp.feature.mypage.task.adapter.web.form;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class TaskGroupCreateForm {
 	/**
 	 * 実施年月日
 	 */
-	private String targetYmd;
+	private LocalDate targetYmd;
 	
 	/**
 	 * 説明

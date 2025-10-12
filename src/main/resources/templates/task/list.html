@@ -13,7 +13,7 @@
 		<div class="l-kanban">
 			<!-- 日付ごと */-->
 			<section class="l-kanban__section" th:each="entry : ${taskSummaryMaps.entrySet()}">
-				<h2 class="l-kanban__heading" th:text="${entry.key}">10/11</h2>
+				<h2 class="l-kanban__heading" th:text="${#temporals.format(entry.key,'MM/dd') }">10/11</h2>
 
 				<ul class="l-kanban__list">
 					<!-- 1タスク */-->
@@ -30,7 +30,7 @@
 						</article>
 					</li>
 				</ul>
-				<button class="c-btn c-btn--outline c-btn--block js-open-modal">
+				<button class="c-btn c-btn--outline c-btn--block js-open-modal" th:data-date="${entry.key}">
 					<span class="c-btn__icon" aria-hidden="true">＋</span>
 					<span>新規ワーク</span>
 				</button>
@@ -42,7 +42,7 @@
 						<p id="newWorkDesc">タスクの詳細を入力して作成します。</p>
 
 						<!-- クリック元から日付を埋め替える */-->
-						<input type="hidden" th:field="*{targetYmd}" th:value="${entry.key}">
+						<input id="newWorkDate" type="hidden" th:field="*{targetYmd}">
 
 						<!--ラベル左 / 入力右（ワイヤーの2列）*/-->
 						<div class="c-modal-form-grid">
@@ -98,10 +98,13 @@
 		$(function () {
 			const $dialog = $('#newWorkDialog');
 			const dialogEl = $dialog[0];              // HTMLDialogElement を取得
+			const $dateInput = $('#newWorkDate');
 
 			// 開く
 			$(document).on('click', '.js-open-modal', function (e) {
 				e.preventDefault();
+				const date = $(this).data('date') || '';
+				$dateInput.val(date);          // ← hidden に代入
 
 				if (!dialogEl.open) dialogEl.showModal(); // モーダルで表示
 			});

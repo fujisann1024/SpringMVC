@@ -1,5 +1,6 @@
 package com.sample.mvcApp.feature.mypage.task.adapter.web.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -7,7 +8,6 @@ import java.util.TreeMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.sample.mvcApp.feature.mypage.task.adapter.web.form.TaskGroupCreateForm;
@@ -27,9 +27,9 @@ public class TaskListController {
 	@GetMapping("task/list")
 	public String Initialize(Model model) {
 
-		Map<String, List<TaskSummaryItemView>> TaskSummaryItemViewMaps = Map.ofEntries(
+		Map<LocalDate, List<TaskSummaryItemView>> TaskSummaryItemViewMaps = Map.ofEntries(
 				Map.entry(
-						"10/11",
+						LocalDate.of(2024, 10, 11),
 						List.of(
 								new TaskSummaryItemView().builder()
 								.groupId("1111")
@@ -65,7 +65,7 @@ public class TaskListController {
 								.build()
 								)),
 				Map.entry(
-						"10/12",
+						LocalDate.of(2024, 10, 12),
 						List.of(
 								new TaskSummaryItemView().builder()
 								.groupId("1121")
@@ -85,7 +85,8 @@ public class TaskListController {
 								.build()
 								)),
 				Map.entry(
-						"10/13",List.of(new TaskSummaryItemView())
+						LocalDate.of(2024, 10, 13)
+						,List.of(new TaskSummaryItemView())
 						)
 				
 				);
@@ -95,8 +96,7 @@ public class TaskListController {
 	}
 	
 	@PostMapping("task/new")
-	public String PostCreateTaskGroup(
-			@ModelAttribute("taskGroupCreateForm") TaskGroupCreateForm form) {
+	public String PostCreateTaskGroup(TaskGroupCreateForm form) {
 		
 		System.out.println(form.toString());
 		
