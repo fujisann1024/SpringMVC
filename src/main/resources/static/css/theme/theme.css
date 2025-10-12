@@ -1,6 +1,7 @@
 @charset "UTF-8";
 :root {
   /* base */
+  --white0:  #ffffff;
   --sky-50:  #f0f9ff;
   --sky-100: #e0f2fe;
   --sky-200: #bae6fd;
@@ -12,17 +13,43 @@
   --sky-800: #075985;
   --sky-900: #0c4a6e;
 
-  /* semantic */
+  /**基本カラー*/
+  --bg: var(--sky-50);
+  --text-default: #0b1320;      /* ほぼ黒（読みやすさ優先） */
+  --muted:#475569;
+  /* focus ring（背景が白/sky系でも3:1目安を取りやすい） */
+  --focus-ring: var(--sky-700);
+
+  /* ヘッダーテーマ */
   --header-bg: var(--sky-50);
   --header-border: var(--sky-200);
 
-  --text-default: #0b1320;      /* ほぼ黒（読みやすさ優先） */
+  /**ナビテーマ*/
   --brand-text: var(--sky-800);    /* ロゴ/ブランド */
   --nav-text: var(--sky-900);      /* 通常リンク文字色 */
   --nav-hover-bg: var(--sky-100);  /* hover 背景 */
-  --nav-active-bg: var(--sky-800); /* 現在地の背景（白文字と高コントラスト） */
-  --nav-active-fg: #ffffff;
+  --nav-active-bg: var(--sky-800); /* 背景 */
+  --nav-active-fg: var(--white0);  /* 文字 */
+  
+  --btn-bg: var(--white0);
+  --btn-fg: var(--text-default);
+  --btn-border: var(--sky-300);
+  --btn-shadow: 0 1px 0 rgba(0,0,0,.02);
+  --btn-hover-bg: var(--sky-100);
 
-  /* focus ring（背景が白/sky系でも3:1目安を取りやすい） */
-  --focus-ring: var(--sky-700);
+  --card-bg:var(--sky-50);
+  --card-border: var(--sky-200);
+  --card-shadow: 0 1px 8px rgba(2,132,199,.06);
+  
+  --chip-bg: var(--sky-100);
+  --chip-fg: var(--sky-900);
+  --chip-border: var(--sky-200);
+  
+  --prio-high-bg:#ef4444; 
+  --prio-high-fg:var(--white0);
+  --prio-mid-bg:#025fff; 
+  --prio-mid-fg:var(--white0);
+  --prio-low-bg:#22c55e; 
+  --prio-low-fg:var(--white0);
+  
 }

@@ -19,9 +19,9 @@
 	             th:attrappend="aria-current=${active}=='appMember' ? 'page' : null">会員一覧画面</a>
 	        </li>
 	        <li class="c-nav__item">
-	          <a class="c-nav__link" th:href="@{/pricing}"
+	          <a class="c-nav__link" th:href="@{/mypage/task/list}"
 	             th:classappend="${active}=='pricing' ? ' is-current' : null"
-	             th:attrappend="aria-current=${active}=='pricing' ? 'page' : null">Pricing</a>
+	             th:attrappend="aria-current=${active}=='taskList' ? 'page' : null">タスク一覧画面</a>
 	        </li>
 	        <li class="c-nav__item">
 	          <a class="c-nav__link" th:href="@{/contact}"

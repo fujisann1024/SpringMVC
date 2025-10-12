@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+.c-modal {
+	width: min(720px, 90vw);
+	max-height: 85vh;
+	padding: 20px;
+
+	border: 1px solid var(--card-border);
+	border-radius: 12px;
+	background: #fff;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, .18);
+
+	position: fixed;
+	/* トップレイヤー上で固定 */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+	/* UA既定の margin:auto を無効化して上記指定を優先 */
+	overflow: auto;
+	/* 中身が多いときスクロール */
+}
+
+.c-modal::backdrop {
+	/* モーダル時にだけ出る半透明の幕 */
+	background: rgba(12, 74, 110, .25);
+	/* sky-900 の薄膜 */
+}
+
+.c-modal__actions {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+	margin-top: 16px;
+}

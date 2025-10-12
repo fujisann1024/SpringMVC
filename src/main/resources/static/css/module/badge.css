@@ -1,0 +1,17 @@
+@charset "UTF-8";
+.c-badge {
+  display: inline-flex; 
+  align-items: center;
+  border-radius: 999px; 
+  padding: 2px 8px; 
+  font-size: .8rem; 
+  line-height: 1.6;
+  background: var(--chip-bg); 
+  color: var(--chip-fg); 
+  border: 1px solid var(--chip-border);
+}
+
+/* 優先度（高/中/低） */
+.c-badge--priority-高 { background: var(--prio-high-bg); color: var(--prio-high-fg); }
+.c-badge--priority-中 { background: var(--prio-mid-bg);  color: var(--prio-mid-fg);  }
+.c-badge--priority-低 { background: var(--prio-low-bg);  color: var(--prio-low-fg);  }
