@@ -16,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
-import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.sample.mvcApp.feature.mypage.appMember.entity.AppMemberInEntity;
@@ -36,9 +35,6 @@ class AppMemberRepositoryTest {
 	
 	@Autowired
 	AppMemberRepository repo;
-	
-	// DbRider に JDBC を渡す
-	private final ConnectionHolder connectionHolder = () -> dataSource.getConnection();
 	
 	private final String testPath = "com/sample/mvcApp/feature/mypage/appMember/repository/";
 
