@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class TaskGroupInDto {
+public class TaskGroupKeyDto {
 	
 	/**
 	 * タスクグループID

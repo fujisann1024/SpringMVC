@@ -21,8 +21,8 @@ import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.api.DBRider;
-import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupInDto;
-import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupOutDto;
+import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupDto;
+import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupKeyDto;
 
 @DataJpaTest
 @DBRider
@@ -43,12 +43,12 @@ class TaskGroupJpaRepositoryTest {
     @DataSet(value = testPath + "Test1_1.xlsx", cleanBefore = true)
     void findById_fromExcel() {
         
-        var id = TaskGroupInDto.builder()
+        var id = TaskGroupKeyDto.builder()
         		.taskGroupId("TG001")
         		.workYmd(LocalDate.parse("2025-10-14"))
         		.build();
 
-        Optional<TaskGroupOutDto> found = repo.findById(id);
+        Optional<TaskGroupDto> found = repo.findById(id);
 
         assertThat(found).isPresent()
         .hasValueSatisfying(e -> {
@@ -72,8 +72,8 @@ class TaskGroupJpaRepositoryTest {
     @DataSet(value = testPath + "Test1_1.xlsx", cleanBefore = true) // 空テーブルで開始
     @ExpectedDataSet(value = testPath + "Test2_1.xlsx", orderBy = {"task_group.task_group_id", "task_group.work_ymd"})
     void save_insert_one_row() {
-        var e = TaskGroupOutDto.builder()
-				.id(TaskGroupInDto.builder()
+        var e = TaskGroupDto.builder()
+				.id(TaskGroupKeyDto.builder()
 						.taskGroupId("TG003")
 						.workYmd(LocalDate.parse("2025-10-15"))
 						.build())
@@ -92,7 +92,7 @@ class TaskGroupJpaRepositoryTest {
 				.updatedAt(OffsetDateTime.parse("2025-10-14T11:55:00+09:00"))
 				.updatedBy("ccc")
 				.build();
-        repo.saveAndFlush( e);
+        repo.save( e);
         // @ExpectedDataSet がテーブル内容＝ after_insert.xlsx と一致するか検証
     }
 
@@ -100,11 +100,13 @@ class TaskGroupJpaRepositoryTest {
     @DisplayName("deleteByIdで削除できる")
     @DataSet(value =  testPath + "Test1_1.xlsx", cleanBefore = true)
     void delete_by_id() {
-        TaskGroupInDto id = new TaskGroupInDto("TG002", LocalDate.parse("2025-10-14"));
+    	TaskGroupKeyDto id = new TaskGroupKeyDto("TG002", LocalDate.parse("2025-10-14"));
 
         assertThat(repo.existsById(id)).isTrue();
         repo.deleteById(id);
         assertThat(repo.existsById(id)).isFalse();
     }
+    
+    
 
 }

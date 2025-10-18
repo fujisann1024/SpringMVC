@@ -21,10 +21,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TaskGroupOutDto{
+public class TaskGroupDto{
 	
 	@EmbeddedId
-	private TaskGroupInDto id;
+	private TaskGroupKeyDto id;
 
 	/**
 	 * 	タイトル
