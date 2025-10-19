@@ -34,7 +34,7 @@ public final class TaskGroup {
 	 * @param id            タスクグループID(必須)
 	 * @param title         タイトル(必須)
 	 * @param description   説明
-	 * @param taskTypeCode  タスク種別コード(必須)
+	 * @param taskTypeCode  タスク種別コード
 	 * @param priority      優先度(必須)
 	 * @param plannedTime   予定時間
 	 * @param actualTime    実績時間

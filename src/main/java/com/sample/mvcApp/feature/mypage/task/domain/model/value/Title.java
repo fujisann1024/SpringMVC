@@ -5,7 +5,7 @@ import com.sample.mvcApp.common.exception.DomainObjectException;
 public record Title( String value) {
 	
 	public Title {
-		if (value == null || value.isEmpty()) {
+		if (value == null || value.isBlank()) {
 			throw new DomainObjectException("タイトルは必須です");
 		}
 		if (value.length() > 100) {

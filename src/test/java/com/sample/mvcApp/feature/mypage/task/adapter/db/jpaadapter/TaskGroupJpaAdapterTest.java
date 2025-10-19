@@ -81,6 +81,7 @@ class TaskGroupJpaAdapterTest {
         adapter.save(aggregate);
 
         verify(aggregate, times(1)).toDto();
+        util.verify(DateUtil::getNowOffsetDateTime, times(1));
         
         // @ExpectedDataSet がテーブル内容＝ after_insert.xlsx と一致するか検証
     }

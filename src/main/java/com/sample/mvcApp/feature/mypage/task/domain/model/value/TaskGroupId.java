@@ -25,7 +25,7 @@ public record TaskGroupId(String groupId, LocalDate workYmd) {
 	 * @throws DomainObjectException 不正な値オブジェクトの場合
 	 */
 	public TaskGroupId {
-		if (Objects.isNull(groupId) || groupId.isEmpty()) {
+		if (Objects.isNull(groupId) || groupId.isBlank()) {
 			throw new DomainObjectException("TaskGroupId:グループタスクIDは必須です");
 		}
 		if (Objects.isNull(workYmd)) {
