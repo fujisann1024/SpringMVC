@@ -57,21 +57,18 @@ class TaskGroupServiceTest {
         verify(gateway, times(1)).save(captor1.capture());
         TaskGroup saved = captor1.getValue();
 
-        // ドメインの公開API（toDto）で中身を検証
-        var dto = saved.toDto();
         assertAll("TaskGroup aggregate built from input",
-            () -> assertEquals("TG001", dto.getId().getTaskGroupId()),
-            () -> assertEquals(LocalDate.parse("2025-10-15"), dto.getId().getWorkYmd()),
-            () -> assertEquals("実装タスク", dto.getTitle()),
-            () -> assertEquals("API実装", dto.getDescription()),
-            () -> assertEquals("DEV", dto.getTaskTypeCode()),
-            () -> assertEquals(Priority.HIGH.getLabel(), dto.getPriority()),
-            () -> assertEquals(LocalTime.parse("09:00:00"), dto.getPlannedStartTime()),
-            () -> assertEquals(LocalTime.parse("12:00:00"), dto.getPlannedEndTime()),
-            () -> assertNull(dto.getActualStartTime()),
-            () -> assertNull(dto.getActualEndTime()),
-            () -> assertEquals(TaskStatus.PLANNED.getLabel(), dto.getStatus()),
-            () -> assertFalse(dto.isTemplate())
+            () -> assertEquals("TG001", saved.id().groupId()),
+			() -> assertEquals(LocalDate.parse("2025-10-15"), saved.id().workYmd()),
+			() -> assertEquals("実装タスク", saved.title().value()),
+			() -> assertEquals("API実装", saved.description()),
+			() -> assertEquals("DEV", saved.taskTypeCode()),
+			() -> assertEquals(Priority.HIGH, saved.priority()),
+			() -> assertEquals(LocalTime.parse("09:00:00"), saved.plannedTime().startTime()),
+			() -> assertEquals(LocalTime.parse("12:00:00"), saved.plannedTime().endTime()),
+			() -> assertNull(saved.actualTime()),
+			() -> assertEquals(TaskStatus.PLANNED, saved.status()),
+			() -> assertFalse(saved.template())
         );
     	
     }

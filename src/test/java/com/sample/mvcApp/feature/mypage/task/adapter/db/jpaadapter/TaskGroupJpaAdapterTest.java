@@ -23,9 +23,12 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.sample.mvcApp.common.util.DateUtil;
-import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupDto;
-import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupKeyDto;
 import com.sample.mvcApp.feature.mypage.task.domain.model.aggregate.TaskGroup;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.Priority;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatus;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.TimeSlot;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
 
 @DataJpaTest
 @DBRider
@@ -50,37 +53,26 @@ class TaskGroupJpaAdapterTest {
     void save_insert_one_row() {
 		
 		 // Arrange
-        TaskGroup aggregate = Mockito.mock(TaskGroup.class);
+        TaskGroup aggregate = new TaskGroup(
+        		new TaskGroupId("TG003",LocalDate.parse("2025-10-15"))
+        		,new Title("実装タスクB")
+				,"ユーザ更新API"
+				,"MEETING"
+				,Priority.LOW
+				,new TimeSlot(LocalTime.parse("18:00:00") ,LocalTime.parse("22:00:00"))
+				,new TimeSlot(LocalTime.parse("18:30:00") ,LocalTime.parse("22:30:00"))
+				,TaskStatus.IN_PROGRESS
+				,true
+				);
         MockedStatic<DateUtil> util = Mockito.mockStatic(DateUtil.class);
-
-        TaskGroupDto dto = TaskGroupDto.builder()
-        		.id(TaskGroupKeyDto.builder()
-						.taskGroupId("TG003")
-						.workYmd(LocalDate.parse("2025-10-15"))
-						.build())
-				.title("実装タスクB")
-				.description("ユーザ更新API")
-				.taskTypeCode("MEETING")
-				.priority("低")
-				.plannedStartTime(LocalTime.parse("18:00:00"))
-				.plannedEndTime(LocalTime.parse("22:00:00"))
-				.actualStartTime(LocalTime.parse("18:30:00"))
-				.actualEndTime(LocalTime.parse("22:30:00"))
-				.status("IN_PROGRESS")
-				.isTemplate(true)
-				.build();
-
         
-
-        when(aggregate.toDto()).thenReturn(dto);
         util.when(DateUtil::getNowOffsetDateTime)
         .thenReturn(java.time.OffsetDateTime.parse("2025-10-14T08:40:00+09:00"));
+        
       
-
         // Act
         adapter.save(aggregate);
 
-        verify(aggregate, times(1)).toDto();
         util.verify(DateUtil::getNowOffsetDateTime, times(1));
         
         // @ExpectedDataSet がテーブル内容＝ after_insert.xlsx と一致するか検証

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sample.mvcApp.common.util.DateUtil;
+import com.sample.mvcApp.feature.mypage.task.adapter.db.helper.TaskGroupDBHelper;
 import com.sample.mvcApp.feature.mypage.task.adapter.db.jpa.TaskGroupJpaRepository;
 import com.sample.mvcApp.feature.mypage.task.domain.model.aggregate.TaskGroup;
 import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupGateway;
@@ -19,7 +20,7 @@ public class TaskGroupJpaAdapter implements TaskGroupGateway {
 		
 		var now = DateUtil.getNowOffsetDateTime();
 		var creater = "system";
-		var dto = taskGroup.toDto();
+		var dto = TaskGroupDBHelper.parseToTaskGroupDto(taskGroup);
 		dto.setCreatedAt(now);
 		dto.setUpdatedAt(now);
 		dto.setCreatedBy(creater);

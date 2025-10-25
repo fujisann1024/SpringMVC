@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
-import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupDto;
-import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupKeyDto;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.Priority;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatus;
@@ -45,23 +43,19 @@ class TaskGroupTest {
 					Priority.HIGH,
 					slot("09:00:00", "12:00:00"));
 
-			// toDto で検証（ドメインの公開API）
-			TaskGroupDto dto = tg.toDto();
-			TaskGroupKeyDto key = dto.getId();
 
 			assertAll("TaskGroup toDto",
-					() -> assertEquals("TG001", key.getTaskGroupId()),
-					() -> assertEquals(LocalDate.parse("2025-10-15"), key.getWorkYmd()),
-					() -> assertEquals("実装タスク", dto.getTitle()),
-					() -> assertEquals("API実装", dto.getDescription()),
-					() -> assertEquals("DEV", dto.getTaskTypeCode()),
-					() -> assertEquals(Priority.HIGH.getLabel(), dto.getPriority()),
-					() -> assertEquals(LocalTime.parse("09:00:00"), dto.getPlannedStartTime()),
-					() -> assertEquals(LocalTime.parse("12:00:00"), dto.getPlannedEndTime()),
-					() -> assertNull(dto.getActualStartTime()),
-					() -> assertNull(dto.getActualEndTime()),
-					() -> assertEquals(TaskStatus.PLANNED.getLabel(), dto.getStatus()),
-					() -> assertFalse(dto.isTemplate()) // isTemplate が false であることを明示
+					() -> assertEquals("TG001", tg.id().groupId()),
+					() -> assertEquals(LocalDate.parse("2025-10-15"), tg.id().workYmd()),
+					() -> assertEquals("実装タスク", tg.title().value()),
+					() -> assertEquals("API実装", tg.description()),
+					() -> assertEquals("DEV", tg.taskTypeCode()),
+					() -> assertEquals(Priority.HIGH, tg.priority()),
+					() -> assertEquals(LocalTime.parse("09:00:00"), tg.plannedTime().startTime()),
+					() -> assertEquals(LocalTime.parse("12:00:00"), tg.plannedTime().endTime()),
+					() -> assertNull(tg.actualTime()),
+					() -> assertEquals(TaskStatus.PLANNED, tg.status()),
+					() -> assertFalse(tg.template())
 			);
 
 		}
@@ -80,22 +74,18 @@ class TaskGroupTest {
 					null // ← 許容（コンストラクタも検証なし）
 			);
 
-			var dto = tg.toDto();
-			TaskGroupKeyDto key = dto.getId();
 
 			assertAll("TaskGroup toDto with null planned",
-					() -> assertEquals("TG002", key.getTaskGroupId()),
-					() -> assertEquals(LocalDate.parse("2025-10-16"), key.getWorkYmd()),
-					() -> assertEquals("レビュー", dto.getTitle()),
-					() -> assertNull(dto.getDescription()),
-					() -> assertNull(dto.getTaskTypeCode()),
-					() -> assertEquals(Priority.MEDIUM.getLabel(), dto.getPriority()),
-					() -> assertNull(dto.getPlannedStartTime()),
-					() -> assertNull(dto.getPlannedEndTime()),
-					() -> assertNull(dto.getActualStartTime()),
-					() -> assertNull(dto.getActualEndTime()),
-					() -> assertEquals(TaskStatus.PLANNED.getLabel(), dto.getStatus()),
-					() -> assertFalse(dto.isTemplate()) // isTemplate が false であることを明示
+					() -> assertEquals("TG002", tg.id().groupId()),
+					() -> assertEquals(LocalDate.parse("2025-10-16"), tg.id().workYmd()),
+					() -> assertEquals("レビュー", tg.title().value()),
+					() -> assertNull(tg.description()),
+					() -> assertNull(tg.taskTypeCode()),
+					() -> assertEquals(Priority.MEDIUM, tg.priority()),
+					() -> assertNull(tg.plannedTime()),
+					() -> assertNull(tg.actualTime()),
+					() -> assertEquals(TaskStatus.PLANNED, tg.status()),
+					() -> assertFalse(tg.template())
 			);
 		}
 
