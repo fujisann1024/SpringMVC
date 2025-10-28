@@ -6,16 +6,19 @@ import com.sample.mvcApp.common.exception.DomainObjectException;
 public enum Priority {
 	
 	/** 優先度：高 */
-    HIGH("高"),
+    HIGH("高", 1),
     /** 優先度：中 */
-    MEDIUM("中"),
+    MEDIUM("中", 2),
     /** 優先度：低 */
-    LOW("低");
+    LOW("低", 3);
 
     private final String label;
 
-    Priority(String label) {
+    private final int sortNo;
+    
+    Priority(String label, int sortNo) {
         this.label = label; // まずは素直に代入だけ
+        this.sortNo = sortNo;
     }
 
     /*
@@ -24,6 +27,13 @@ public enum Priority {
     public String getLabel() {
 		return label;
 	}
+    
+    /*
+	 * 優先度ソート順を取得する
+	 */
+    public int getSortNo() {
+    	return sortNo;
+    }
     
     /**
 	 * 優先度コードからPriority列挙型を取得する

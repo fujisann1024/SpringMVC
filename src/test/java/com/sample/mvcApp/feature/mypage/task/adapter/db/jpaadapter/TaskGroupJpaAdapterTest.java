@@ -29,6 +29,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatus;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TimeSlot;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
+import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupGateway;
 
 @DataJpaTest
 @DBRider
@@ -41,7 +42,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
 class TaskGroupJpaAdapterTest {
 	
 	@Autowired
-    TaskGroupJpaAdapter adapter;
+	TaskGroupGateway adapter;
 
     private final String testPath = "com/sample/mvcApp/feature/mypage/task/adapter/db/jpaadapter/";
 	

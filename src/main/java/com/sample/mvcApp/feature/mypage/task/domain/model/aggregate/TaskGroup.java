@@ -15,7 +15,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
  * 不変の値オブジェクト的に扱うため record を採用。
  * null 許可ポリシーは従来通り：id/title/priority は必須。
  */
-public record TaskGroup(
+public final record TaskGroup(
         TaskGroupId id,
         Title title,
         String description,
