@@ -61,12 +61,12 @@ class TaskGroupServiceTest {
             () -> assertEquals("TG001", saved.id().groupId()),
 			() -> assertEquals(LocalDate.parse("2025-10-15"), saved.id().workYmd()),
 			() -> assertEquals("実装タスク", saved.title().value()),
-			() -> assertEquals("API実装", saved.description()),
-			() -> assertEquals("DEV", saved.taskTypeCode()),
+			() -> assertEquals("API実装", saved.description().orElse(null)),
+			() -> assertEquals("DEV", saved.taskTypeCode().orElse(null)),
 			() -> assertEquals(Priority.HIGH, saved.priority()),
-			() -> assertEquals(LocalTime.parse("09:00:00"), saved.plannedTime().startTime()),
-			() -> assertEquals(LocalTime.parse("12:00:00"), saved.plannedTime().endTime()),
-			() -> assertNull(saved.actualTime()),
+			() -> assertEquals(LocalTime.parse("09:00:00"), saved.plannedTime().orElse(null).startTime()),
+			() -> assertEquals(LocalTime.parse("12:00:00"), saved.plannedTime().orElse(null).endTime()),
+			() -> assertNull(saved.actualTime().orElse(null)),
 			() -> assertEquals(TaskStatus.PLANNED, saved.status()),
 			() -> assertFalse(saved.template())
         );

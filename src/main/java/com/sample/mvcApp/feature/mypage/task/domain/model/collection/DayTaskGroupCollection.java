@@ -2,6 +2,7 @@ package com.sample.mvcApp.feature.mypage.task.domain.model.collection;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +78,7 @@ public final class DayTaskGroupCollection{
         // 開始時刻 → 優先度（高→中→低）→ ID の順で安定ソート
 		Comparator<TaskGroup> byStartTime =
 		        Comparator.comparing(
-		            (TaskGroup g) -> Optional.ofNullable(g.plannedTime())
+		            (TaskGroup g) -> g.plannedTime()
 		                                     .map(TimeSlot::startTime)
 		                                     .orElse(null),
 		            Comparator.nullsLast(Comparator.naturalOrder()));
@@ -93,20 +94,22 @@ public final class DayTaskGroupCollection{
 
 		// 今のタスクと次のタスクの時間帯が重複していないかチェック
 		for (int i = 1; i < filteredTaskGroupList.size(); i++) {
-			TimeSlot prev = filteredTaskGroupList.get(i - 1).plannedTime();
-			TimeSlot curr = filteredTaskGroupList.get(i).plannedTime();
+			LocalTime prevEndTime = filteredTaskGroupList.get(i - 1)
+												 .plannedTime()
+												 .map(TimeSlot::endTime)
+											     .orElse(null); 
+			LocalTime currStartTime = filteredTaskGroupList.get(i)
+					                             .plannedTime()
+					                             .map(TimeSlot::startTime)
+					                             .orElse(null);
 			
 			// どちらかが null の場合はスキップ
-			if (prev == null || curr == null) {
+			if (prevEndTime == null || currStartTime == null) {
 				continue;
 			}
 			
-			// どちらかの終了/開始時間が null の場合はスキップ
-			if(prev.endTime() == null || curr.startTime() == null) {
-				continue;
-			}
 			
-			if (!prev.endTime().isBefore(curr.startTime())) {
+			if (!prevEndTime.isBefore(currStartTime)) {
 				throw new DomainObjectException("予定時間の範囲が重複しています");
 			}
 		}
@@ -127,8 +130,8 @@ public final class DayTaskGroupCollection{
 	 /** 1日の合計予定時間（plannedTime のみ） */
 	  public Duration totalPlanned() {
 	    return this.taskGroups.stream()
-	        .map(TaskGroup::plannedTime)
-	        .filter(pt -> pt != null)
+	        .map( tg -> tg.plannedTime().orElse(null))
+	        .filter(pt -> pt != null && pt.startTime() != null && pt.endTime() != null)
 	        .map(ts -> Duration.between(ts.startTime(), ts.endTime()))
 	        .reduce(Duration.ZERO, Duration::plus);
 	  }

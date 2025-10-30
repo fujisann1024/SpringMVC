@@ -20,6 +20,8 @@ class TimeSlotTest {
 		var t = new TimeSlot(null, null);
 		assertNull(t.startTime());
 		assertNull(t.endTime());
+		assertNull(t.getStartTimeHHmm());
+		assertNull(t.getEndTimeHHmm());
 	}
 
 	@ParameterizedTest(name = "[{index}] OK: {0} - {1}")
@@ -33,6 +35,8 @@ class TimeSlotTest {
 		var slot = new TimeSlot(LocalTime.parse(s), LocalTime.parse(e));
 		assertEquals(LocalTime.parse(s), slot.startTime());
 		assertEquals(LocalTime.parse(e), slot.endTime());
+		assertEquals(s.substring(0, 5), slot.getStartTimeHHmm());
+		assertEquals(e.substring(0, 5), slot.getEndTimeHHmm());
 	}
 
 	@Test
