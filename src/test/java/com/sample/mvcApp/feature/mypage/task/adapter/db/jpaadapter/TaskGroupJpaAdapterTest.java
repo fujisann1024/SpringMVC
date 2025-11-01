@@ -40,7 +40,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupGateway;
 		qualifiedTableNames = true
 		) 
 @Import(TaskGroupJpaAdapter.class)
-class TaskGroupJpaAdapterTest {
+public class TaskGroupJpaAdapterTest {
 	
 	@Autowired
 	TaskGroupGateway adapter;

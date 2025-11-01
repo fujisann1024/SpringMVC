@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import com.sample.mvcApp.common.exception.DomainObjectException;
 
 /** TaskStatus列挙型のテスト */
-class TaskStatusTest {
+public class TaskStatusTest {
 
 	@ParameterizedTest(name = "[{index}] \"{0}\" -> {1}")
 	@DisplayName("fromLabel: 正しいラベルは対応する列挙へ変換される")

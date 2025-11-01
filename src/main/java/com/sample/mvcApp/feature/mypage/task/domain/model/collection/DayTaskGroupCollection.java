@@ -83,14 +83,7 @@ public final class DayTaskGroupCollection{
 		                                     .orElse(null),
 		            Comparator.nullsLast(Comparator.naturalOrder()));
 		
-		Comparator<TaskGroup> byPriority =
-		        Comparator.comparingInt(g -> g.priority().getSortNo()); // 小さいほど高優先
-		
-		Comparator<TaskGroup> byId =
-						        Comparator.comparing(g -> g.id().groupId());
-		
-		
-		filteredTaskGroupList.sort(byStartTime.thenComparing(byPriority).thenComparing(byId));
+		filteredTaskGroupList.sort(byStartTime);
 
 		// 今のタスクと次のタスクの時間帯が重複していないかチェック
 		for (int i = 1; i < filteredTaskGroupList.size(); i++) {
@@ -108,8 +101,8 @@ public final class DayTaskGroupCollection{
 				continue;
 			}
 			
-			
-			if (!prevEndTime.isBefore(currStartTime)) {
+			// prevEnd > currStartの場合エラー
+			if (prevEndTime.isAfter(currStartTime)) {
 				throw new DomainObjectException("予定時間の範囲が重複しています");
 			}
 		}

@@ -28,7 +28,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupQuery;
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE, qualifiedTableNames = true)
 @Import(TaskGroupJdbcDao.class)
-class TaskGroupJdbcDaoTest {
+public class TaskGroupJdbcDaoTest {
 
 	@Autowired
 	TaskGroupQuery dao;

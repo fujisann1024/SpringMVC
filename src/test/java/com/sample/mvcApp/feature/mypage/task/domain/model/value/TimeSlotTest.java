@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
 
-class TimeSlotTest {
+public class TimeSlotTest {
 
 	@Test
 	@DisplayName("正常: start=null, end=null は生成OK")

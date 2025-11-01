@@ -16,7 +16,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatus;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TimeSlot;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
 
-class TaskGroupTest {
+public class TaskGroupTest {
 
 	private TaskGroupId id(String gid, String ymd) {
 		return new TaskGroupId(gid, LocalDate.parse(ymd));

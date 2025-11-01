@@ -5,3 +5,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/STUDY_DB
     username: postgres
     password: postgres
+
+
+todo:
+ sysdate: # システム日付
+   value: 2025-10-15
+   useflag: true  # true ;valueの値を使用

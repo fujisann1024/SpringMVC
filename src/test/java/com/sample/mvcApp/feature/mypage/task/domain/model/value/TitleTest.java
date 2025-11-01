@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
 
-class TitleTest {
+public class TitleTest {
 
 	 /* ===== 正常系 ===== */
 

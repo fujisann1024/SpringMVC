@@ -1,6 +1,8 @@
 package com.sample.mvcApp.feature.mypage.task.domain.model.value;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
 
@@ -31,6 +33,22 @@ public final class WeekRange {
 
 	public LocalDate getEnd() {
 		return end;
+	}
+
+	/**
+	 * 開始から終了までの日付の一覧を取得
+	 * @return
+	 */
+	public List<LocalDate> getRangeDateList() {
+		var dateList = new ArrayList<LocalDate>();
+		for (LocalDate startDate = this.start; 
+				!startDate.isAfter(this.end); 
+			 startDate = startDate.plusDays(1)) 
+		{
+			dateList.add(startDate);
+		}
+		return dateList;
+
 	}
 
 }
