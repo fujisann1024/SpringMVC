@@ -92,8 +92,8 @@ public class TaskGroupService implements TaskGroupUseCase {
 				.map(g -> new TaskGroupSummaryOutput(
 						g.id().groupId(),
 						g.title().value(),
-						g.plannedTime().orElse(null).getStartTimeHHmm(),
-						g.plannedTime().orElse(null).getEndTimeHHmm(),
+						g.plannedTime().map(TimeSlot::getStartTimeHHmm).orElse(null),
+                        g.plannedTime().map(TimeSlot::getEndTimeHHmm).orElse(null),
 						g.priority().getLabel(),
 						g.taskTypeCode().orElse(null)
 						))
