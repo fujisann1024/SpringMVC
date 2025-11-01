@@ -3,6 +3,7 @@ package com.sample.mvcApp.feature.mypage.task.domain.model.value;
 import java.time.LocalTime;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
+import com.sample.mvcApp.common.util.DateUtil;
 
 /**
  * 時間帯
@@ -34,6 +35,14 @@ public record TimeSlot(LocalTime startTime, LocalTime endTime) {
             }
         }
 
+	}
+	
+	public String getStartTimeHHmm() {
+		return DateUtil.formatLocalTime(startTime, "HH:mm");
+	}
+	
+	public String getEndTimeHHmm() {
+		return DateUtil.formatLocalTime(endTime, "HH:mm");
 	}
 
 }

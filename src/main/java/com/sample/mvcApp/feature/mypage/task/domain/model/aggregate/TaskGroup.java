@@ -15,14 +15,14 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
  * 不変の値オブジェクト的に扱うため record を採用。
  * null 許可ポリシーは従来通り：id/title/priority は必須。
  */
-public record TaskGroup(
+public final record TaskGroup(
         TaskGroupId id,
         Title title,
-        String description,
-        String taskTypeCode,
+        Optional<String> description,
+        Optional<String> taskTypeCode,
         Priority priority,
-        TimeSlot plannedTime,
-        TimeSlot actualTime,
+        Optional<TimeSlot> plannedTime,
+        Optional<TimeSlot> actualTime,
         TaskStatus status,
         boolean template
 ) {
@@ -60,11 +60,11 @@ public record TaskGroup(
         return new TaskGroup(
                 id,
                 title,
-                description,
-                taskTypeCode,
+                Optional.ofNullable(description),
+                Optional.ofNullable(taskTypeCode),
                 priority,
-                planned,
-                null,                    // actualTime
+                Optional.ofNullable(planned),
+                Optional.empty(),                    // actualTime
                 TaskStatus.PLANNED,      // status
                 false                    // template
         );

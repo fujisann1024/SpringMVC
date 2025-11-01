@@ -31,7 +31,7 @@ import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupKeyDto;
 		caseInsensitiveStrategy = Orthography.LOWERCASE, 
 		qualifiedTableNames = true
 		) // or CaseInsensitiveStrategy.LOWERCASE
-class TaskGroupJpaRepositoryTest {
+public class TaskGroupJpaRepositoryTest {
 
     @Autowired
     TaskGroupJpaRepository repo;

@@ -1,8 +1,5 @@
 package com.sample.mvcApp.feature.mypage.task.adapter.web.controller;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import com.sample.mvcApp.feature.mypage.task.adapter.web.form.TaskGroupCreateFor
 import com.sample.mvcApp.feature.mypage.task.adapter.web.helper.TaskGroupWebHelper;
 import com.sample.mvcApp.feature.mypage.task.adapter.web.itemView.TaskSummaryItemView;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.application.usecase.TaskGroupUseCase;
 
 /*
@@ -33,71 +31,11 @@ public class TaskGroupController {
 	 */
 	@GetMapping("task/list")
 	public String Initialize(Model model) {
+		
+		TaskGroupWeekOutput output = taskGroupUseCase.getTaskGroupWeekRange();
 
-		Map<LocalDate, List<TaskSummaryItemView>> TaskSummaryItemViewMaps = Map.ofEntries(
-				Map.entry(
-						LocalDate.of(2024, 10, 11),
-						List.of(
-								new TaskSummaryItemView().builder()
-								.groupId("1111")
-								.title("朝活動")
-								.startTime("7:00:00")
-								.endTime("9:00:00")
-								.priority("中")
-								.taskKind("定期作業")
-								.build(),
-								new TaskSummaryItemView().builder()
-								.groupId("1112")
-								.title("仕事")
-								.startTime("9:00:00")
-								.endTime("17:00:00")
-								.priority("高")
-								.taskKind("仕事")
-								.build(),
-								new TaskSummaryItemView().builder()
-								.groupId("1113")
-								.title("夜活動")
-								.startTime("17:00:00")
-								.endTime("22:00:00")
-								.priority("中")
-								.taskKind("定期作業")
-								.build(),
-								new TaskSummaryItemView().builder()
-								.groupId("1114")
-								.title("N活動")
-								.startTime("22:00:00")
-								.endTime("23:00:00")
-								.priority("中")
-								.taskKind("定期作業")
-								.build()
-								)),
-				Map.entry(
-						LocalDate.of(2024, 10, 12),
-						List.of(
-								new TaskSummaryItemView().builder()
-								.groupId("1121")
-								.title("朝活動")
-								.startTime("7:00:00")
-								.endTime("9:00:00")
-								.priority("中")
-								.taskKind("定期作業")
-								.build(),
-								new TaskSummaryItemView().builder()
-								.groupId("1122")
-								.title("仕事")
-								.startTime("9:00:00")
-								.endTime("17:00:00")
-								.priority("高")
-								.taskKind("仕事")
-								.build()
-								)),
-				Map.entry(
-						LocalDate.of(2024, 10, 13)
-						,List.of(new TaskSummaryItemView())
-						)
-				
-				);
-		model.addAttribute("taskSummaryMaps",new TreeMap<>(TaskSummaryItemViewMaps));
+		TaskSummaryItemView view = TaskGroupWebHelper.parseToTaskSummaryItemView(output);
+		model.addAttribute("taskSummaryMaps",new TreeMap<>(view.getTaskSummaryItemViewMaps()));
 		model.addAttribute("taskGroupCreateForm", new TaskGroupCreateForm());
 		return "task/list";
 	}

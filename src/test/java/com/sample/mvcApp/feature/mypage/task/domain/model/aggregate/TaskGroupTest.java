@@ -16,7 +16,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatus;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TimeSlot;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
 
-class TaskGroupTest {
+public class TaskGroupTest {
 
 	private TaskGroupId id(String gid, String ymd) {
 		return new TaskGroupId(gid, LocalDate.parse(ymd));
@@ -48,12 +48,12 @@ class TaskGroupTest {
 					() -> assertEquals("TG001", tg.id().groupId()),
 					() -> assertEquals(LocalDate.parse("2025-10-15"), tg.id().workYmd()),
 					() -> assertEquals("実装タスク", tg.title().value()),
-					() -> assertEquals("API実装", tg.description()),
-					() -> assertEquals("DEV", tg.taskTypeCode()),
+					() -> assertEquals("API実装", tg.description().orElse(null)),
+					() -> assertEquals("DEV", tg.taskTypeCode().orElse(null)),
 					() -> assertEquals(Priority.HIGH, tg.priority()),
-					() -> assertEquals(LocalTime.parse("09:00:00"), tg.plannedTime().startTime()),
-					() -> assertEquals(LocalTime.parse("12:00:00"), tg.plannedTime().endTime()),
-					() -> assertNull(tg.actualTime()),
+					() -> assertEquals(LocalTime.parse("09:00:00"), tg.plannedTime().orElse(null).startTime()),
+					() -> assertEquals(LocalTime.parse("12:00:00"), tg.plannedTime().orElse(null).endTime()),
+					() -> assertNull(tg.actualTime().orElse(null)),
 					() -> assertEquals(TaskStatus.PLANNED, tg.status()),
 					() -> assertFalse(tg.template())
 			);
@@ -79,11 +79,11 @@ class TaskGroupTest {
 					() -> assertEquals("TG002", tg.id().groupId()),
 					() -> assertEquals(LocalDate.parse("2025-10-16"), tg.id().workYmd()),
 					() -> assertEquals("レビュー", tg.title().value()),
-					() -> assertNull(tg.description()),
-					() -> assertNull(tg.taskTypeCode()),
+					() -> assertNull(tg.description().orElse(null)),
+					() -> assertNull(tg.taskTypeCode().orElse(null)),
 					() -> assertEquals(Priority.MEDIUM, tg.priority()),
-					() -> assertNull(tg.plannedTime()),
-					() -> assertNull(tg.actualTime()),
+					() -> assertNull(tg.plannedTime().orElse(null)),
+					() -> assertNull(tg.actualTime().orElse(null)),
 					() -> assertEquals(TaskStatus.PLANNED, tg.status()),
 					() -> assertFalse(tg.template())
 			);

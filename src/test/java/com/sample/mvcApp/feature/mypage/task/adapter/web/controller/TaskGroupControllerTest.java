@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +23,15 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.sample.mvcApp.common.util.IdUtil;
+import com.sample.mvcApp.feature.mypage.task.adapter.web.form.TaskGroupCreateForm;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupSummaryOutput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.application.usecase.TaskGroupUseCase;
 
 @WebMvcTest(TaskGroupController.class)
 @AutoConfigureMockMvc
-class TaskGroupControllerTest {
+public class TaskGroupControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -69,4 +75,44 @@ class TaskGroupControllerTest {
 				() -> Assertions.assertEquals(LocalTime.parse("09:00"), in.plannedStartTime()),
 				() -> Assertions.assertEquals(LocalTime.parse("12:00"), in.plannedEndTime()));
 	}
+	
+	@Test
+    @DisplayName("GET /mypage/task/list: モデルを初期化して task/list を返す")
+    void getList_initializes_model_and_returns_view() throws Exception {
+        // --- arrange: UseCase が返すダミーデータを用意 ---
+        Map<LocalDate, List<TaskGroupSummaryOutput>> week = new HashMap<>();
+        week.put(LocalDate.of(2025, 10, 15), List.of(
+            new TaskGroupSummaryOutput("TG001", "実装タスク1", "09:00", "10:00", "高", "DEV"),
+            new TaskGroupSummaryOutput("TG002", "実装タスク1", "10:00", "11:00", "高", "DEV")
+        ));
+        week.put(LocalDate.of(2025, 10, 16), List.of()); // 空の日が混在してもOK
+
+        when(taskGroupUseCase.getTaskGroupWeekRange()).thenReturn(new TaskGroupWeekOutput(week));
+
+        // --- act & assert ---
+        var result = mockMvc.perform(get("/mypage/task/list"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("task/list"))
+            .andExpect(model().attributeExists("taskSummaryMaps", "taskGroupCreateForm"))
+            .andReturn();
+
+        // --- verify: モデルの中身を軽く検証 ---
+        var modelMap = result.getModelAndView().getModel();
+
+        Object mapsObj = modelMap.get("taskSummaryMaps");
+        assertNotNull(mapsObj, "taskSummaryMaps should be present");
+        assertTrue(mapsObj instanceof Map, "taskSummaryMaps should be a Map");
+
+        @SuppressWarnings("unchecked")
+        Map<LocalDate, ?> taskSummaryMaps = (Map<LocalDate, ?>) mapsObj;
+        assertTrue(taskSummaryMaps.containsKey(LocalDate.of(2025, 10, 15)));
+        assertTrue(taskSummaryMaps.containsKey(LocalDate.of(2025, 10, 16)));
+
+        Object formObj = modelMap.get("taskGroupCreateForm");
+        assertNotNull(formObj);
+        assertTrue(formObj instanceof TaskGroupCreateForm);
+
+        // UseCase が1回呼ばれたこと
+        verify(taskGroupUseCase, times(1)).getTaskGroupWeekRange();
+    }
 }

@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
 
-class TaskGroupIdTest {
+public class TaskGroupIdTest {
 
     @Test
     @DisplayName("正常：必須2項目で生成できる")

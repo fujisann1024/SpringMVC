@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
 
-class PriorityTest {
+public class PriorityTest {
 
 	@ParameterizedTest(name = "[{index}] \"{0}\" -> {1}")
 	@DisplayName("parsePriority: 正しいラベルは対応する列挙へ変換される")

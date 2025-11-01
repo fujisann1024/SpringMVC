@@ -13,7 +13,7 @@ public enum Priority {
     LOW("低");
 
     private final String label;
-
+    
     Priority(String label) {
         this.label = label; // まずは素直に代入だけ
     }
@@ -24,6 +24,7 @@ public enum Priority {
     public String getLabel() {
 		return label;
 	}
+   
     
     /**
 	 * 優先度コードからPriority列挙型を取得する

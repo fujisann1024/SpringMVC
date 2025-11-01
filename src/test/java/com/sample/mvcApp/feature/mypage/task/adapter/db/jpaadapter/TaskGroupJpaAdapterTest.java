@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatus;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TimeSlot;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
+import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupGateway;
 
 @DataJpaTest
 @DBRider
@@ -38,10 +40,10 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.Title;
 		qualifiedTableNames = true
 		) 
 @Import(TaskGroupJpaAdapter.class)
-class TaskGroupJpaAdapterTest {
+public class TaskGroupJpaAdapterTest {
 	
 	@Autowired
-    TaskGroupJpaAdapter adapter;
+	TaskGroupGateway adapter;
 
     private final String testPath = "com/sample/mvcApp/feature/mypage/task/adapter/db/jpaadapter/";
 	
@@ -51,16 +53,16 @@ class TaskGroupJpaAdapterTest {
     @DataSet(value = testPath + "Test1_1.xlsx", cleanBefore = true) // 空テーブルで開始
     @ExpectedDataSet(value = testPath + "Test2_1.xlsx", orderBy = {"task_group.task_group_id", "task_group.work_ymd"})
     void save_insert_one_row() {
-		
+	
 		 // Arrange
         TaskGroup aggregate = new TaskGroup(
         		new TaskGroupId("TG003",LocalDate.parse("2025-10-15"))
         		,new Title("実装タスクB")
-				,"ユーザ更新API"
-				,"MEETING"
+				,Optional.ofNullable("ユーザ更新API")
+				,Optional.ofNullable("MEETING")
 				,Priority.LOW
-				,new TimeSlot(LocalTime.parse("18:00:00") ,LocalTime.parse("22:00:00"))
-				,new TimeSlot(LocalTime.parse("18:30:00") ,LocalTime.parse("22:30:00"))
+				,Optional.ofNullable(new TimeSlot(LocalTime.parse("18:00:00") ,LocalTime.parse("22:00:00")))
+				,Optional.ofNullable(new TimeSlot(LocalTime.parse("18:30:00") ,LocalTime.parse("22:30:00")))
 				,TaskStatus.IN_PROGRESS
 				,true
 				);
