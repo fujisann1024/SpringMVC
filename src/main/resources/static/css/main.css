@@ -1,1 +1,21 @@
 @charset "UTF-8";
+
+/*見た目では消すけど、スクリーンリーダー等には残す」*/
+.u-visually-hidden {
+	/*通常フローから外し、好きな位置に“退避”できるようにする下準備。*/
+  position: absolute !important;
+  /*要素を極小にして余計なサイズを持たせない。*/
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  /*1pxぶんのサイズすらレイアウトやスクロールに影響させない（はみ出し回避）。*/
+  margin: -1px !important;
+  /*中身がはみ出しても見えないようにする。*/
+  overflow: hidden !important;
+  /*描画領域を0に切り取る*/
+  clip: rect(0 0 0 0) !important;   
+  clip-path: inset(50%) !important;
+  /*改行で高さが広がるのを防ぐ*/
+  white-space: nowrap !important;
+}
