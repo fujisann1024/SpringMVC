@@ -19,6 +19,8 @@
   --muted:#475569;
   /* focus ring（背景が白/sky系でも3:1目安を取りやすい） */
   --focus-ring: var(--sky-700);
+  /* 影 */
+  --shadow-default: 0 8px 24px rgba(15, 23, 42, 0.08);
 
   /* ヘッダーテーマ */
   --header-bg: var(--sky-50);
@@ -31,16 +33,21 @@
   --nav-active-bg: var(--sky-800); /* 背景 */
   --nav-active-fg: var(--white0);  /* 文字 */
   
+  /**ボタン*/
   --btn-bg: var(--white0);
+  --btn-bg-primary: var(--sky-500);
   --btn-fg: var(--text-default);
+  --btn-fg-primary: var(--sky-100);
   --btn-border: var(--sky-300);
   --btn-shadow: 0 1px 0 rgba(0,0,0,.02);
   --btn-hover-bg: var(--sky-100);
 
+  /**カード*/
   --card-bg:var(--sky-50);
   --card-border: var(--sky-200);
   --card-shadow: 0 1px 8px rgba(2,132,199,.06);
   
+  /**バッジ*/
   --chip-bg: var(--sky-100);
   --chip-fg: var(--sky-900);
   --chip-border: var(--sky-200);

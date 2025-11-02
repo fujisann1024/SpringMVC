@@ -10,6 +10,33 @@
 
 <body>
 	<main>
+		<section class="c-file-upload">
+			<form class-"c-file-upload__form" method="post" th:action="@{/mypage/task/upload}" enctype="multipart/form-data">
+				<!-- ファイルアップロード非表示 -->
+				<input id="taskUploadFile" 
+				       class="c-file-upload__input u-visually-hidden" 
+					   type="file" name="file" 
+					   accept=".xlsx" 
+					   required>
+				<div class="c-file-upload__field">
+					<!-- ファイルアップロードの代替UI-->
+					<button type="button" class="c-btn js-pick-file">
+						ファイル選択(Excel)
+					</button>
+					
+					<!-- 選択済みファイル名 -->
+					<span class="c-file-upload__filename"></span>
+				</div>
+				<div class="c-file-upload__actions">
+					<!-- クリアは任意 -->
+					<button type="button" class="c-btn c-btn--outline--primaly js-clear-file">クリア</button>
+					<!-- 送信は別ボタン：最初は無効 -->
+					<button type="submit" class="c-btn c-btn--outline--primaly js-submit-upload" disabled>
+						アップロード
+					</button>	
+				</div>
+			</form>
+		</section>
 		<div class="l-kanban">
 			<!-- 日付ごと */-->
 			<section class="l-kanban__section" th:each="entry : ${taskSummaryMaps.entrySet()}">
@@ -116,7 +143,6 @@
 				if (dialogEl.open) dialogEl.close(); // モーダルを閉じる
 			});
 
-
 			// バックドロップクリックで閉じる
 			$dialog.on('click', function (e) {
 				const r = this.getBoundingClientRect();
@@ -124,9 +150,61 @@
 					e.clientY < r.top || e.clientY > r.bottom;
 				if (outside) this.close('backdrop');
 			});
-
-
 		});
+		
+		$(function () {
+		   const $form  = $('.c-file-upload__form'); //フォーム
+		   const $file  = $('#taskUploadFile'); // ファイルアップロードinput
+		   const $pick  = $('.js-pick-file'); //選択ファイルボタン
+		   const $clear = $('.js-clear-file'); // クリアボタン
+		   const $name  = $('.c-file-upload__filename'); // 選択ファイル名
+		   const $submit= $('.js-submit-upload'); // アップロードボタン
+		
+		   // ファイル選択ダイアログを開く
+		   $(document).on('click', '.js-pick-file', function (e) {
+		     e.preventDefault();
+		     $file.trigger('click');
+		   });
+		
+		   // 選択されたらファイル名を表示して送信ボタンを有効化
+		   $file.on('change', function () {
+		     const f = this.files && this.files[0];
+		     if (!f) {
+		       $name.text('');
+		       $submit.prop('disabled', true);
+		       return;
+		     }
+		
+		     // 軽いクライアント検証（必ずサーバでも検証してください）
+		     if (!/\.xlsx$/i.test(f.name)) {
+		       alert('拡張子が .xlsx のファイルを選択してください。');
+		       this.value = '';
+		       $name.text('');
+		       $submit.prop('disabled', true);
+		       return;
+		     }
+		
+		     $name.text(f.name);
+		     $submit.prop('disabled', false);
+		   });
+		
+		   // クリア
+		   $(document).on('click', '.js-clear-file', function (e) {
+		     e.preventDefault();
+		     $file.val('');
+		     $name.text('');
+		     $submit.prop('disabled', true);
+		   });
+		
+		   // 送信前の最終チェック（空なら止める）
+		   $form.on('submit', function (e) {
+		     if (!$file[0].files || !$file[0].files[0]) {
+		       e.preventDefault();
+		       alert('ファイルを選択してください。');
+		     }
+		   });
+		   
+		 });
 	</script>
 
 </body>
