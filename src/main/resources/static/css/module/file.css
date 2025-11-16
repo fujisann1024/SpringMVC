@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+.c-file-upload {
+    max-width: 400px;
+    margin: 0 auto 32px;
+    padding: 24px;
+    background-color:var(--white0);
+    border-radius: 12px;
+    box-shadow: var(--shadow-default);
+}
+
+.c-file-upload__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.c-file-upload__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.c-file-upload__input {
+    display: block;
+    padding: 10px 12px;
+    border: 1px solid #cbd5f5;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-default);
+    background-color: var(--white0);
+}
+
+.c-file-upload__filename {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.c-file-upload__input:focus {
+    outline: none;
+    border-color: var(--focus-ring);
+}
+
+.c-file-upload__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 4px
+}

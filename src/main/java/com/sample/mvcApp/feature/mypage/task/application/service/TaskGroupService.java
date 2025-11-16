@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sample.mvcApp.common.props.SysdateProps;
 import com.sample.mvcApp.common.util.DateUtil;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
+import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupUploadInput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupSummaryOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.application.usecase.TaskGroupUseCase;
@@ -43,6 +44,12 @@ public class TaskGroupService implements TaskGroupUseCase {
 	@Transactional
 	public void create(TaskGroupCreateInput input) {
 		
+		TaskGroup taskGroup = this.toTaskGroup(input);
+		taskGroupGateway.save(taskGroup);
+		
+	}
+
+	private TaskGroup toTaskGroup(TaskGroupCreateInput input) {
 		var TaskGroupId = new TaskGroupId(input.taskGroupId(), input.workYmd());
 		var title = new Title(input.title());
 		String description = input.description();
@@ -57,9 +64,7 @@ public class TaskGroupService implements TaskGroupUseCase {
 				, taskTypeCode
 				, priority
 				, plannedTime);
-		
-		taskGroupGateway.save(taskGroup);
-		
+		return taskGroup;
 	}
 
 	@Override
@@ -110,7 +115,18 @@ public class TaskGroupService implements TaskGroupUseCase {
 		return newMap;
 			
 	}
-	
-	
+
+	@Override
+	@Transactional
+	public void uploadTaskGroup(TaskGroupUploadInput input) {
+
+		List<TaskGroup> csvRowList = input.inputList().stream()
+				.map(data -> this.toTaskGroup(data))
+				.toList();
+		
+		taskGroupGateway.saveAll(csvRowList);
+		
+		
+	}
 
 }

@@ -24,6 +24,13 @@
   box-shadow: var(--btn-shadow);
 }
 
+.c-btn--outline--primaly {
+  background: var(--btn-bg-primary);
+  color:  var(--btn-fg-primary);
+  border: var(--btn-border);
+  box-shadow: var(--btn-shadow);
+}
+
 .c-btn--outline:hover { 
 	background: var(--btn-hover-bg); 
 }

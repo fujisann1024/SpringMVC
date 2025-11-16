@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.sample.mvcApp.common.file.util.collection.CsvMappedRowCollection;
 import com.sample.mvcApp.common.util.IdUtil;
+import com.sample.mvcApp.feature.mypage.task.adapter.file.csvdto.TaskGroupCsvRow;
 import com.sample.mvcApp.feature.mypage.task.adapter.web.form.TaskGroupCreateForm;
 import com.sample.mvcApp.feature.mypage.task.adapter.web.itemView.TaskSummaryDetailItemView;
 import com.sample.mvcApp.feature.mypage.task.adapter.web.itemView.TaskSummaryItemView;
@@ -27,6 +29,24 @@ public class TaskGroupWebHelper {
 				, form.getPlannedStart()
 				, form.getPlannedEnd()
 				);
+	}
+	
+	public static List<TaskGroupCreateInput> parseToTaskGroupCreateInputList(
+			CsvMappedRowCollection<TaskGroupCsvRow> csvRowList) {
+		
+		return csvRowList.getCsvRowList().stream()
+						     .map(csv -> new TaskGroupCreateInput(
+						    		  IdUtil.generateId()
+						    		 ,csv.payload().getWorkYmd()
+						    		 ,csv.payload().getTitle()
+						    		 ,csv.payload().getDescription()
+						    		 ,csv.payload().getTaskTypeCode()
+						    		 ,csv.payload().getPriority()
+						    		 ,csv.payload().getPlannedStartTime()
+						    		 ,csv.payload().getPlannedEndTime()
+						    		 ))
+						     .toList();
+	
 	}
 	
 	public static TaskSummaryItemView parseToTaskSummaryItemView(TaskGroupWeekOutput output) {
