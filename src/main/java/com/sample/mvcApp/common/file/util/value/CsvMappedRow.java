@@ -1,4 +1,4 @@
-package com.sample.mvcApp.common.file.util.row;
+package com.sample.mvcApp.common.file.util.value;
 
 import java.util.List;
 

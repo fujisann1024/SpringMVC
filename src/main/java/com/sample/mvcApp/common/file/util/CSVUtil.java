@@ -25,7 +25,8 @@ import org.apache.commons.csv.CSVRecord;
 
 import com.sample.mvcApp.common.file.annotation.FileColumn;
 import com.sample.mvcApp.common.file.exception.FileImportException;
-import com.sample.mvcApp.common.file.util.row.CsvMappedRow;
+import com.sample.mvcApp.common.file.util.collection.CsvMappedRowCollection;
+import com.sample.mvcApp.common.file.util.value.CsvMappedRow;
 import com.sample.mvcApp.common.util.DateUtil;
 
 public class CSVUtil {
@@ -36,7 +37,7 @@ public class CSVUtil {
      * @param type        マッピング対象クラス（デフォルトコンストラクタ必須）
      * @param hasHeader   先頭行がヘッダーなら true（スキップ）
      */
-    public static <T> List<CsvMappedRow<T>> map(InputStream inputStream, Class<T> type, boolean hasHeader) {
+    public static <T> CsvMappedRowCollection<T> map(InputStream inputStream, Class<T> type, boolean hasHeader) {
         CSVFormat format = CSVFormat.DEFAULT.builder()
             .setTrim(true)
             .setIgnoreSurroundingSpaces(true)
@@ -62,7 +63,7 @@ public class CSVUtil {
                 if (rowResult == null || rowResult.isEmptyRow()) continue;
                 mappedRows.add(new CsvMappedRow<>(csvRowNumber, rowResult.payload(), rowResult.errors()));
             }
-            return mappedRows;
+            return CsvMappedRowCollection.of(mappedRows);
 
         } catch (IOException ex) {
             throw new FileImportException("CSVファイルの読み込みに失敗しました。", ex);
