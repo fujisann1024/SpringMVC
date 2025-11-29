@@ -2,6 +2,7 @@ package com.sample.mvcApp.feature.mypage.task.application.usecase;
 
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupUploadInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupResultOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 
 /**
@@ -24,7 +25,7 @@ public interface TaskGroupUseCase {
 	/**
 	 * タスクグループアップロード
 	 */
-	public void uploadTaskGroup(TaskGroupUploadInput input);
+	public TaskGroupResultOutput uploadTaskGroup(TaskGroupUploadInput input);
 	
 
 }

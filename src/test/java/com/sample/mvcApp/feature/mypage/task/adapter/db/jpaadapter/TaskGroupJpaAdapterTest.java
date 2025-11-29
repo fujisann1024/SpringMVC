@@ -4,8 +4,12 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -44,12 +48,26 @@ public class TaskGroupJpaAdapterTest {
 	
 	@Autowired
 	TaskGroupGateway adapter;
+	
+	private MockedStatic<DateUtil> util;
 
     private final String testPath = "com/sample/mvcApp/feature/mypage/task/adapter/db/jpaadapter/";
 	
+    @BeforeEach
+    void setup() {
+        util = Mockito.mockStatic(DateUtil.class);
+        util.when(DateUtil::getNowOffsetDateTime)
+            .thenReturn(OffsetDateTime.parse("2025-10-14T08:40:00+09:00"));
+    }
+
+    @AfterEach
+    void tearDown() {
+        util.close();  // 重要
+    }
+    
 	@Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED) // ← これを付ける
-    @DisplayName("saveでINSERTでき、期待状態と一致する")
+    @DisplayName("saveで1件INSERTでき、期待状態と一致する")
     @DataSet(value = testPath + "Test1_1.xlsx", cleanBefore = true) // 空テーブルで開始
     @ExpectedDataSet(value = testPath + "Test2_1.xlsx", orderBy = {"task_group.task_group_id", "task_group.work_ymd"})
     void save_insert_one_row() {
@@ -66,7 +84,6 @@ public class TaskGroupJpaAdapterTest {
 				,TaskStatus.IN_PROGRESS
 				,true
 				);
-        MockedStatic<DateUtil> util = Mockito.mockStatic(DateUtil.class);
         
         util.when(DateUtil::getNowOffsetDateTime)
         .thenReturn(java.time.OffsetDateTime.parse("2025-10-14T08:40:00+09:00"));
@@ -76,8 +93,46 @@ public class TaskGroupJpaAdapterTest {
         adapter.save(aggregate);
 
         util.verify(DateUtil::getNowOffsetDateTime, times(1));
-        
-        // @ExpectedDataSet がテーブル内容＝ after_insert.xlsx と一致するか検証
+    }
+
+	@Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED) // ← これを付ける
+    @DisplayName("saveで複数件INSERTでき、期待状態と一致する")
+    @DataSet(value = testPath + "Test1_1.xlsx", cleanBefore = true) // 空テーブルで開始
+    @ExpectedDataSet(value = testPath + "Test3_1.xlsx", orderBy = {"task_group.task_group_id", "task_group.work_ymd"})
+    void save_insert_all_row() {
+
+		// Arrange
+		List<TaskGroup> aggregateList = List.of(
+				new TaskGroup(
+						new TaskGroupId("TG003", LocalDate.parse("2025-10-15"))
+					  , new Title("実装タスクB")
+					  , Optional.ofNullable("ユーザ更新API")
+					  , Optional.ofNullable("MEETING")
+					  , Priority.LOW
+					  , Optional.ofNullable(new TimeSlot(LocalTime.parse("18:00:00"), LocalTime.parse("22:00:00")))
+					  , Optional.ofNullable(new TimeSlot(LocalTime.parse("18:30:00"), LocalTime.parse("22:30:00")))
+					  , TaskStatus.IN_PROGRESS
+					  , true),
+				new TaskGroup(
+						new TaskGroupId("TG003", LocalDate.parse("2025-10-16"))
+					  , new Title("実装タスクC")
+					  , Optional.ofNullable("ユーザ更新APIテスト")
+					  , Optional.ofNullable("MEETING")
+					  , Priority.MEDIUM
+					  , Optional.ofNullable(new TimeSlot(LocalTime.parse("18:30:00"), LocalTime.parse("22:30:00")))
+					  , Optional.ofNullable(new TimeSlot(LocalTime.parse("19:30:00"), LocalTime.parse("23:30:00")))
+					  , TaskStatus.PLANNED
+					  , false)
+				);
+
+		util.when(DateUtil::getNowOffsetDateTime)
+				.thenReturn(java.time.OffsetDateTime.parse("2025-10-14T08:40:00+09:00"));
+
+		// Act
+		adapter.saveAll(aggregateList);
+
+		util.verify(DateUtil::getNowOffsetDateTime, times(2));
     }
 
 }

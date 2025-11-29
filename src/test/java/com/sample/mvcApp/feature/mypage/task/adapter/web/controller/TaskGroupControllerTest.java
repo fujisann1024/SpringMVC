@@ -1,6 +1,7 @@
 package com.sample.mvcApp.feature.mypage.task.adapter.web.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -19,12 +20,15 @@ import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.sample.mvcApp.common.util.IdUtil;
 import com.sample.mvcApp.feature.mypage.task.adapter.web.form.TaskGroupCreateForm;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
+import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupUploadInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupResultOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupSummaryOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.application.usecase.TaskGroupUseCase;
@@ -44,9 +48,9 @@ public class TaskGroupControllerTest {
 
 	@Test
 	@DisplayName("POST /task/new: 正常系")
-	void postCreate_callsUsecase_and_redirects() throws Exception {
+	void post_mypage_task_new() throws Exception {
 
-		MockedStatic<IdUtil> mocked = mockStatic(IdUtil.class);
+		try (MockedStatic<IdUtil> mocked = mockStatic(IdUtil.class);){
 		mocked.when(IdUtil::generateId).thenReturn("TG001");
 
 		mockMvc.perform(post("/mypage/task/new")
@@ -74,11 +78,12 @@ public class TaskGroupControllerTest {
 				() -> assertEquals("高", in.priority()),
 				() -> Assertions.assertEquals(LocalTime.parse("09:00"), in.plannedStartTime()),
 				() -> Assertions.assertEquals(LocalTime.parse("12:00"), in.plannedEndTime()));
+		}
 	}
 	
 	@Test
     @DisplayName("GET /mypage/task/list: モデルを初期化して task/list を返す")
-    void getList_initializes_model_and_returns_view() throws Exception {
+    void get_mypage_task_list() throws Exception {
         // --- arrange: UseCase が返すダミーデータを用意 ---
         Map<LocalDate, List<TaskGroupSummaryOutput>> week = new HashMap<>();
         week.put(LocalDate.of(2025, 10, 15), List.of(
@@ -115,4 +120,67 @@ public class TaskGroupControllerTest {
         // UseCase が1回呼ばれたこと
         verify(taskGroupUseCase, times(1)).getTaskGroupWeekRange();
     }
+
+	@Test
+	@DisplayName("POST /mypage/task/upload: ファイルアップロード(正常)")
+	void post_mypage_task_upload() throws Exception {
+
+		// --- Arrange: multipart で送信するダミーCSV ---
+		var csv = new StringBuilder()
+				.append("対象日,タイトル,説明,タスク種別,優先度,予定開始,予定終了\n")
+				.append("2025/10/01,API製造,基盤側のAPIを製造,開発,高,10:23:34,17:23:34\n")
+				.append("2025/10/02,APIテスト,基盤側のAPIをテスト,テスト,中,11:23:34,18:23:34");
+		byte[] csvBytes = csv.toString().getBytes();
+		MockMultipartFile file = new MockMultipartFile(
+				"file", // @RequestParam 名
+				"test.csv",
+				"text/csv",
+				csvBytes);
+		
+		try (MockedStatic<IdUtil> mocked = mockStatic(IdUtil.class);){
+			mocked.when(IdUtil::generateId).thenReturn("TG001");
+		
+			// UseCase 戻り値
+			when(taskGroupUseCase.uploadTaskGroup(any())).thenReturn(new TaskGroupResultOutput(2));
+
+			// --- Act ---
+			mockMvc.perform(multipart("/mypage/task/upload")
+					.file(file))
+					.andExpect(status().is3xxRedirection())
+					.andExpect(redirectedUrl("/mypage/task/list"));
+
+			// --- Assert: UseCase が呼ばれたか検証 ---
+			ArgumentCaptor<TaskGroupUploadInput> captor = ArgumentCaptor.forClass(TaskGroupUploadInput.class);
+
+			List<TaskGroupCreateInput> expectedInputList = List.of(
+					new TaskGroupCreateInput(
+						 "TG001"
+						,LocalDate.of(2025,10,1)
+						,"API製造"
+						,"基盤側のAPIを製造"
+						,"開発"
+						, "高"
+						,LocalTime.of(10,23,34)
+						,LocalTime.of(17,23,34)
+						),
+					new TaskGroupCreateInput(
+						 "TG001"
+						,LocalDate.of(2025,10,2)
+						,"APIテスト"
+						,"基盤側のAPIをテスト"
+						,"テスト"
+						, "中"
+						,LocalTime.of(11,23,34)
+						,LocalTime.of(18,23,34)
+						)
+					);
+		mocked.verify(() -> IdUtil.generateId(), times(2));
+		verify(taskGroupUseCase, times(1)).uploadTaskGroup(captor.capture());
+		List<TaskGroupCreateInput> capturedList = captor.getValue().inputList();
+		for(int i = 0; i < capturedList.size(); i++) {
+        	assertEquals(capturedList.get(i).toString(), expectedInputList.get(i).toString());
+        }
+	  }
+
+	}
 }

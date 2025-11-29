@@ -14,6 +14,7 @@ import com.sample.mvcApp.common.props.SysdateProps;
 import com.sample.mvcApp.common.util.DateUtil;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupUploadInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupResultOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupSummaryOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.application.usecase.TaskGroupUseCase;
@@ -118,13 +119,14 @@ public class TaskGroupService implements TaskGroupUseCase {
 
 	@Override
 	@Transactional
-	public void uploadTaskGroup(TaskGroupUploadInput input) {
+	public TaskGroupResultOutput uploadTaskGroup(TaskGroupUploadInput input) {
 
 		List<TaskGroup> csvRowList = input.inputList().stream()
 				.map(data -> this.toTaskGroup(data))
 				.toList();
 		
-		taskGroupGateway.saveAll(csvRowList);
+		int count = taskGroupGateway.saveAll(csvRowList);
+		return new TaskGroupResultOutput(count);
 		
 		
 	}

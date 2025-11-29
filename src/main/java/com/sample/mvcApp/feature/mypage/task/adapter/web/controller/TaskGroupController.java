@@ -2,6 +2,7 @@ package com.sample.mvcApp.feature.mypage.task.adapter.web.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.sample.mvcApp.feature.mypage.task.adapter.web.helper.TaskGroupWebHelp
 import com.sample.mvcApp.feature.mypage.task.adapter.web.itemView.TaskSummaryItemView;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupUploadInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupResultOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.application.usecase.TaskGroupUseCase;
 
@@ -65,11 +67,11 @@ public class TaskGroupController {
 			 return "redirect:/mypage/task/list";
 		 }
 		 
-		 var inputList = TaskGroupWebHelper.parseToTaskGroupCreateInputList(result);
+		 List<TaskGroupCreateInput> inputList = TaskGroupWebHelper.parseToTaskGroupCreateInputList(result);
 		
 		 TaskGroupUploadInput input = new TaskGroupUploadInput(inputList);
-		 taskGroupUseCase.uploadTaskGroup(input);
-             return "redirect:/mypage/task/list";
+		 TaskGroupResultOutput output = taskGroupUseCase.uploadTaskGroup(input);
+         return "redirect:/mypage/task/list";
      }
 	
 

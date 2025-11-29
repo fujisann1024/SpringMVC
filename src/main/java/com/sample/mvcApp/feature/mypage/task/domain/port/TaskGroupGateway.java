@@ -8,5 +8,5 @@ public interface TaskGroupGateway {
 
 	public void save(TaskGroup taskGroup);
 	
-	public void saveAll(List<TaskGroup> taskGroupList);
+	public int saveAll(List<TaskGroup> taskGroupList);
 }

@@ -28,13 +28,13 @@ public class TaskGroupJpaAdapter implements TaskGroupGateway {
 	}
 	
 	@Override
-	public void saveAll(List<TaskGroup> taskGroupList) {
+	public int saveAll(List<TaskGroup> taskGroupList) {
 		List<TaskGroupDto> taskGroupDtoList = taskGroupList.stream()
 				.map(entity -> TaskGroupDBHelper.parseToTaskGroupDto(entity))
 				.peek(entity -> setSystemDataByCreate(entity))
 				.toList();
 		
-		taskGroupJpaRepository.saveAll(taskGroupDtoList);
+		return taskGroupJpaRepository.saveAll(taskGroupDtoList).size();
 	}
 	
 	/*
