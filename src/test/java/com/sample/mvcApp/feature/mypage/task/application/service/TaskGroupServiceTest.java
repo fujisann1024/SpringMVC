@@ -20,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.sample.mvcApp.common.exception.DomainObjectException;
 import com.sample.mvcApp.common.props.SysdateProps;
 import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupCreateInput;
+import com.sample.mvcApp.feature.mypage.task.application.input.TaskGroupUploadInput;
+import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupResultOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupSummaryOutput;
 import com.sample.mvcApp.feature.mypage.task.application.output.TaskGroupWeekOutput;
 import com.sample.mvcApp.feature.mypage.task.domain.model.aggregate.TaskGroup;
@@ -61,8 +63,6 @@ public class TaskGroupServiceTest {
 	private TimeSlot slot(String start, String end) {
 		return new TimeSlot(LocalTime.parse(start), LocalTime.parse(end));
 	}
-
-
 
     @Test
     @DisplayName("正常：入力から集約を構築し repository.save を1回呼ぶ")
@@ -187,9 +187,81 @@ public class TaskGroupServiceTest {
         );
         
     }
+    
+    @Test
+    @DisplayName("正常：CSV アップロードで複数 TaskGroup を生成し saveAll を呼び出す")
+    void uploadTaskGroup_success() {
 
-    
-    
+        // --- Arrange: CSV 相当の inputList（TaskGroupCreateInput） ---
+        var inputList = List.of(
+                new TaskGroupCreateInput(
+                        "TG001",
+                        LocalDate.of(2025,10,1),
+                        "API製造",
+                        "基盤側APIを製造",
+                        "DEV",
+                        "高",
+                        LocalTime.of(10,23,34),
+                        LocalTime.of(17,23,34)
+                ),
+                new TaskGroupCreateInput(
+                        "TG002",
+                        LocalDate.of(2025,10,2),
+                        "APIテスト",
+                        "基盤側APIをテスト",
+                        "TEST",
+                        "中",
+                        LocalTime.of(11,23,34),
+                        LocalTime.of(18,23,34)
+                )
+        );
+
+        TaskGroupUploadInput input = new TaskGroupUploadInput(inputList);
+
+        // saveAll の戻り値をモック
+        when(gateway.saveAll(anyList())).thenReturn(2);
+
+        // --- Act ---
+        TaskGroupResultOutput out = service.uploadTaskGroup(input);
+
+        // --- Assert ---
+        ArgumentCaptor<List<TaskGroup>> captor = ArgumentCaptor.forClass(List.class);
+        verify(gateway, times(1)).saveAll(captor.capture());
+
+        List<TaskGroup> savedList = captor.getValue();
+        assertEquals(2, savedList.size());
+
+        TaskGroup tg1 = savedList.get(0);
+        TaskGroup tg2 = savedList.get(1);
+
+        // --- TaskGroup1 の検証 ---
+        assertAll("TaskGroup1",
+                () -> assertEquals("TG001", tg1.id().groupId()),
+                () -> assertEquals(LocalDate.of(2025,10,1), tg1.id().workYmd()),
+                () -> assertEquals("API製造", tg1.title().value()),
+                () -> assertEquals("基盤側APIを製造", tg1.description().orElse(null)),
+                () -> assertEquals("DEV", tg1.taskTypeCode().orElse(null)),
+                () -> assertEquals(Priority.HIGH, tg1.priority()),
+                () -> assertEquals(LocalTime.of(10,23,34), tg1.plannedTime().orElse(null).startTime()),
+                () -> assertEquals(LocalTime.of(17,23,34), tg1.plannedTime().orElse(null).endTime())
+        );
+
+        // --- TaskGroup2 の検証 ---
+        assertAll("TaskGroup2",
+                () -> assertEquals("TG002", tg2.id().groupId()),
+                () -> assertEquals(LocalDate.of(2025,10,2), tg2.id().workYmd()),
+                () -> assertEquals("APIテスト", tg2.title().value()),
+                () -> assertEquals("基盤側APIをテスト", tg2.description().orElse(null)),
+                () -> assertEquals("TEST", tg2.taskTypeCode().orElse(null)),
+                () -> assertEquals(Priority.MEDIUM, tg2.priority()),
+                () -> assertEquals(LocalTime.of(11,23,34), tg2.plannedTime().orElse(null).startTime()),
+                () -> assertEquals(LocalTime.of(18,23,34), tg2.plannedTime().orElse(null).endTime())
+        );
+
+        // 戻り値の検証
+        assertEquals(2, out.resultCount());
+    }
+   
     @Test
     @DisplayName("異常：不正な優先度で DomainObjectException が伝播する")
     void create_throws_on_invalid_priority() {

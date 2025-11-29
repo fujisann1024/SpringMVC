@@ -11,6 +11,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupIdTest;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskStatusTest;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TimeSlotTest;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.TitleTest;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.WeekRangeTest;
 
 @Suite
 @SelectClasses({
@@ -20,6 +21,7 @@ import com.sample.mvcApp.feature.mypage.task.domain.model.value.TitleTest;
 	  TaskStatusTest.class,
 	  TimeSlotTest.class,
 	  TitleTest.class,
+	  WeekRangeTest.class,
 	  DayTaskGroupCollectionTest.class,
 	  TaskGroupCollectionMapTest.class
 	})
