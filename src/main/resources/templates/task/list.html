@@ -16,12 +16,12 @@
 				<input id="taskUploadFile" 
 				       class="c-file-upload__input u-visually-hidden" 
 					   type="file" name="file" 
-					   accept=".xlsx" 
+					   accept=".csv" 
 					   required>
 				<div class="c-file-upload__field">
 					<!-- ファイルアップロードの代替UI-->
 					<button type="button" class="c-btn js-pick-file">
-						ファイル選択(Excel)
+						ファイル選択(CSV)
 					</button>
 					
 					<!-- 選択済みファイル名 -->
@@ -176,8 +176,8 @@
 		     }
 		
 		     // 軽いクライアント検証（必ずサーバでも検証してください）
-		     if (!/\.xlsx$/i.test(f.name)) {
-		       alert('拡張子が .xlsx のファイルを選択してください。');
+		     if (!/\.csv$/i.test(f.name)) {
+		       alert('拡張子が .csv のファイルを選択してください。');
 		       this.value = '';
 		       $name.text('');
 		       $submit.prop('disabled', true);
