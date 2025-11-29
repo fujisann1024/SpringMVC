@@ -1,6 +1,8 @@
 package com.sample.mvcApp.common.file.util.collection;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
@@ -41,6 +43,19 @@ public final class  CsvMappedRowCollection<T> {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * エラー一覧のマップを取得
+	 */
+	public Map<Integer, List<String>> getAllErrorsMap() {
+		Map<Integer, List<String>> errorMap = new HashMap<>();
+		for(CsvMappedRow<T> row :this.csvRowList) {
+			if(row.isError()) {
+				errorMap.put(row.rowIndex(), row.mappingErrors());
+			}
+		}
+		return errorMap;
 	}
 	
 	/**

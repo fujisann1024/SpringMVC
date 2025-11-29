@@ -1,7 +1,6 @@
 package com.sample.mvcApp.common.file.util;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
@@ -65,11 +64,15 @@ public class CSVUtil {
             }
             return CsvMappedRowCollection.of(mappedRows);
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new FileImportException("CSVファイルの読み込みに失敗しました。", ex);
-        } catch (ReflectiveOperationException ex) {
-            throw new FileImportException("CSVのマッピング処理に失敗しました。", ex);
-        }
+        }finally {
+			try {
+				inputStream.close();
+			} catch (Exception ex) {
+				throw new FileImportException("クローズに失敗しました", ex);
+			}
+		}
     }
 
     /**
@@ -116,8 +119,8 @@ public class CSVUtil {
                     errors.add(formatMessage(
                         csvRowNumber,
                         meta.header(),
-                        String.format("の値[%s]を型[%s]に設定できません。%s",
-                            cellValue, meta.field().getType().getSimpleName(), ex.getMessage())));
+                        String.format("の値[%s]を型[%s]に設定できません。",
+                            cellValue, meta.field().getType().getSimpleName())));
                 }
             }
 
