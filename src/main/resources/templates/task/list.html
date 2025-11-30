@@ -35,8 +35,20 @@
 						アップロード
 					</button>	
 				</div>
+				<p class="c-file-upload__status" aria-live="polite"></p>
 			</form>
 		</section>
+		<div class="l-kanban__pagination">
+			<a class="c-btn c-btn--outline" th:href="@{/mypage/task/list(baseDate=${previousWeekStart})}">
+				&laquo; 前の週
+			</a>
+			<span class="l-kanban__pagination-range" th:text="${currentWeekStart} + ' - ' + ${currentWeekEnd}">
+				2023/01/01 - 2023/01/07
+			</span>
+			<a class="c-btn c-btn--outline" th:href="@{/mypage/task/list(baseDate=${nextWeekStart})}">
+				次の週 &raquo;
+			</a>
+		</div>
 		<div class="l-kanban">
 			<!-- 日付ごと */-->
 			<section class="l-kanban__section" th:each="entry : ${taskSummaryMaps.entrySet()}">
@@ -117,11 +129,9 @@
 				</dialog>
 			</section>
 		</div>
-
-
-
 	</main>
 	<script>
+		// モーダルダイアログ制御
 		$(function () {
 			const $dialog = $('#newWorkDialog');
 			const dialogEl = $dialog[0];              // HTMLDialogElement を取得
@@ -151,7 +161,7 @@
 				if (outside) this.close('backdrop');
 			});
 		});
-		
+		// ファイルアップロード制御
 		$(function () {
 		   const $form  = $('.c-file-upload__form'); //フォーム
 		   const $file  = $('#taskUploadFile'); // ファイルアップロードinput
@@ -159,6 +169,8 @@
 		   const $clear = $('.js-clear-file'); // クリアボタン
 		   const $name  = $('.c-file-upload__filename'); // 選択ファイル名
 		   const $submit= $('.js-submit-upload'); // アップロードボタン
+		   const $status = $('.c-file-upload__status'); // ステータス表示
+		   const defaultSubmitText = $submit.text();
 		
 		   // ファイル選択ダイアログを開く
 		   $(document).on('click', '.js-pick-file', function (e) {
@@ -189,7 +201,7 @@
 		   });
 		
 		   // クリア
-		   $(document).on('click', '.js-clear-file', function (e) {
+		   $clear.on('click', function (e) {
 		     e.preventDefault();
 		     $file.val('');
 		     $name.text('');
@@ -198,15 +210,46 @@
 		
 		   // 送信前の最終チェック（空なら止める）
 		   $form.on('submit', function (e) {
+			 e.preventDefault();
+			 
 		     if (!$file[0].files || !$file[0].files[0]) {
-		       e.preventDefault();
 		       alert('ファイルを選択してください。');
+			   return;
 		     }
+			 
+			 const formData = new FormData($form[0]);
+			 $submit.prop('disabled', true);
+			 $status.text('アップロード中...');
+			 
+			 apiRequest({
+				type: 'POST',
+				url: $form.attr('action'),
+				data: formData,
+				contentType: false,
+				processData: false,
+				onSuccess: function(response) {
+					const count = response && response.resultCount !== undefined ? response.resultCount : 0;
+					$status.text("成功");
+					alert(`アップロードが完了しました（${count}件）`);
+					},
+				onError: function(xhr) {
+					const message = (xhr.responseJSON && xhr.responseJSON.message) || 'アップロードに失敗しました。';
+					$status.text("失敗");
+					alert(message.replace(/\\n/g, '\n'));
+					},
+				onComplete: function() {
+					// 送信ボタンを再度有効化してフォームをクリア
+					$submit.prop('disabled', false);
+					$file.val('');
+					$name.text('');
+					}
+             });
+			 
 		   });
 		   
-		 });
+		 });		 
 	</script>
-
+	
 </body>
 
 </html>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 import com.sample.mvcApp.common.exception.DomainObjectException;
 import com.sample.mvcApp.common.file.util.value.CsvMappedRow;
@@ -56,6 +57,19 @@ public final class  CsvMappedRowCollection<T> {
 			}
 		}
 		return errorMap;
+	}
+	
+	/**
+	 * エラー一覧を文字列に変換
+	 * */
+	public String getAllErrorsString() {
+		var sj = new StringJoiner("\n");
+		for(CsvMappedRow<T> row :this.csvRowList) {
+			if(row.isError()) {
+				sj.add(String.join("\\n", row.mappingErrors()));
+			}
+		}
+		return sj.toString();
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sample.mvcApp.common.file.util.collection.CsvMappedRowCollection;
+import com.sample.mvcApp.common.util.DateUtil;
 import com.sample.mvcApp.common.util.IdUtil;
 import com.sample.mvcApp.feature.mypage.task.adapter.file.csvdto.TaskGroupCsvRow;
 import com.sample.mvcApp.feature.mypage.task.adapter.web.form.TaskGroupCreateForm;
@@ -72,6 +73,10 @@ public class TaskGroupWebHelper {
 						);
 		
 		return  TaskSummaryItemView.builder()
+				.currentWeekStart(DateUtil.formatLocalDate(output.weekStartDate(), "uuuu/MM/dd"))
+				.currentWeekEnd(DateUtil.formatLocalDate(output.weekEndDate(), "uuuu/MM/dd"))
+				.previousWeekStart(DateUtil.formatLocalDate(output.weekStartDate().minusDays(7), "uuuu/MM/dd"))
+				.nextWeekStart(DateUtil.formatLocalDate(output.weekEndDate().plusDays(1), "uuuu/MM/dd"))
 				.TaskSummaryItemViewMaps(map)
 				.build();
 	}

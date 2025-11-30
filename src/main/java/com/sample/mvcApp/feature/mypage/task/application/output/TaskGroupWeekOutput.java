@@ -5,5 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public record TaskGroupWeekOutput(
+		LocalDate weekStartDate,
+		LocalDate weekEndDate,
 		Map<LocalDate, List<TaskGroupSummaryOutput>>  taskGroupByWeekMap
 		) { }
