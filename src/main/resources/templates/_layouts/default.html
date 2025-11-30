@@ -21,6 +21,7 @@
 	<main th:replace="${content}">content</main>
 	<footer th:replace="~{_fragments/footer :: footer}">footer</footer>
 	<script	th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script th:src="@{/js/AjaxCommon.js}"></script>
 	<script th:src="@{/js/main.js}" defer></script>
 	<th:block th:replace="${scripts}"></th:block>
 </body>

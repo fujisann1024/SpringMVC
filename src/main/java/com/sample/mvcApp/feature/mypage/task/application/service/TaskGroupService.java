@@ -89,7 +89,9 @@ public class TaskGroupService implements TaskGroupUseCase {
 						e -> toTaskGroupSummaryOutput(e.getValue())
 						));
 		Map<LocalDate, List<TaskGroupSummaryOutput>> weekRangeMap = this.toWeekRangeMap(byDate, range);
-		TaskGroupWeekOutput output = new TaskGroupWeekOutput(weekRangeMap);
+		LocalDate weekStartDate = range.getStart();
+		LocalDate weekEndDate = range.getEnd();
+		TaskGroupWeekOutput output = new TaskGroupWeekOutput(weekStartDate,weekEndDate,weekRangeMap);
 		return output;
 	}
 	

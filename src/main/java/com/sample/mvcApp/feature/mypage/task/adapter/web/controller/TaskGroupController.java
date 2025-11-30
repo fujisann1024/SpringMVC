@@ -3,9 +3,11 @@ package com.sample.mvcApp.feature.mypage.task.adapter.web.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +48,10 @@ public class TaskGroupController {
 
 		TaskSummaryItemView view = TaskGroupWebHelper.parseToTaskSummaryItemView(output);
 		model.addAttribute("taskSummaryMaps",new TreeMap<>(view.getTaskSummaryItemViewMaps()));
+		model.addAttribute("currentWeekStart",view.getCurrentWeekStart());
+		model.addAttribute("currentWeekEnd",view.getCurrentWeekEnd());
+		model.addAttribute("previousWeekStart",view.getPreviousWeekStart());
+		model.addAttribute("nextWeekStart",view.getNextWeekStart());
 		model.addAttribute("taskGroupCreateForm", new TaskGroupCreateForm());
 		return "task/list";
 	}
@@ -59,19 +65,23 @@ public class TaskGroupController {
 	}
 	
 	 @PostMapping("task/upload")
-     public String uploadTaskGroup(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+     public ResponseEntity<Map<String, Object>> uploadTaskGroup(@RequestParam("file") MultipartFile multipartFile) throws IOException {
 
-		 InputStream stream = multipartFile.getInputStream();
-		 CsvMappedRowCollection<TaskGroupCsvRow> result = CSVUtil.map(stream, TaskGroupCsvRow.class, true);
-		 if(result.isError()) {
-			 return "redirect:/mypage/task/list";
+		 try (InputStream stream = multipartFile.getInputStream()){
+			 CsvMappedRowCollection<TaskGroupCsvRow> result = CSVUtil.map(stream, TaskGroupCsvRow.class, true);
+			 if(result.isError()) {
+				 return ResponseEntity.badRequest()
+                         .body(Map.of("message", result.getAllErrorsString()));
+			 }
+			 
+			 List<TaskGroupCreateInput> inputList = TaskGroupWebHelper.parseToTaskGroupCreateInputList(result);
+			 TaskGroupUploadInput input = new TaskGroupUploadInput(inputList);
+			 TaskGroupResultOutput output = taskGroupUseCase.uploadTaskGroup(input);
+			 
+			 return ResponseEntity.ok()
+					 .body(Map.of("resultCount", output.resultCount()));
 		 }
 		 
-		 List<TaskGroupCreateInput> inputList = TaskGroupWebHelper.parseToTaskGroupCreateInputList(result);
-		
-		 TaskGroupUploadInput input = new TaskGroupUploadInput(inputList);
-		 TaskGroupResultOutput output = taskGroupUseCase.uploadTaskGroup(input);
-         return "redirect:/mypage/task/list";
      }
 	
 

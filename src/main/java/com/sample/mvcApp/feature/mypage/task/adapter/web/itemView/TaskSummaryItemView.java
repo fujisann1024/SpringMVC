@@ -20,6 +20,26 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 public class TaskSummaryItemView {
+	
+	/**
+	 * 当週開始日
+	 */
+	private String currentWeekStart;
+	
+	/**
+	 * 当週終了日
+	 */
+	private String currentWeekEnd;
+	
+	/**
+	 * 前週開始日
+	 */
+	private String previousWeekStart;
+	
+	/**
+	 * 次週開始日
+	 */
+	private String nextWeekStart;
 
 	private Map<LocalDate, List<TaskSummaryDetailItemView>> TaskSummaryItemViewMaps;
 }

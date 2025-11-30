@@ -47,3 +47,9 @@
     justify-content: space-between;
     margin-top: 4px
 }
+
+.c-file-upload__status {
+    min-height: 1.2em;
+    font-size: 0.9rem;
+    color: var(--muted);
+}

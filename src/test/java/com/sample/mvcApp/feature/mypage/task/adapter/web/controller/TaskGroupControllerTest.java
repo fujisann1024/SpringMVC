@@ -92,13 +92,19 @@ public class TaskGroupControllerTest {
         ));
         week.put(LocalDate.of(2025, 10, 16), List.of()); // 空の日が混在してもOK
 
-        when(taskGroupUseCase.getTaskGroupWeekRange()).thenReturn(new TaskGroupWeekOutput(week));
+        when(taskGroupUseCase.getTaskGroupWeekRange()).thenReturn(
+        		new TaskGroupWeekOutput(LocalDate.of(2025, 10, 13), LocalDate.of(2025, 10, 19), week)
+        		);
 
         // --- act & assert ---
         var result = mockMvc.perform(get("/mypage/task/list"))
             .andExpect(status().isOk())
             .andExpect(view().name("task/list"))
             .andExpect(model().attributeExists("taskSummaryMaps", "taskGroupCreateForm"))
+            .andExpect(model().attribute("currentWeekStart", "2025/10/13"))
+            .andExpect(model().attribute("currentWeekEnd", "2025/10/19"))
+            .andExpect(model().attribute("previousWeekStart", "2025/10/06"))
+            .andExpect(model().attribute("nextWeekStart", "2025/10/20"))
             .andReturn();
 
         // --- verify: モデルの中身を軽く検証 ---
@@ -146,8 +152,8 @@ public class TaskGroupControllerTest {
 			// --- Act ---
 			mockMvc.perform(multipart("/mypage/task/upload")
 					.file(file))
-					.andExpect(status().is3xxRedirection())
-					.andExpect(redirectedUrl("/mypage/task/list"));
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.resultCount").value(2));
 
 			// --- Assert: UseCase が呼ばれたか検証 ---
 			ArgumentCaptor<TaskGroupUploadInput> captor = ArgumentCaptor.forClass(TaskGroupUploadInput.class);
