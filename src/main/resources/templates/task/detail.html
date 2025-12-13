@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{_layouts/default :: layout(~{::title}, ~{::main}, 'taskList' , ~{::script})}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>タスク詳細画面</title>
+
+</head>
+
+<body>
+	<main class="l-kanban-detail">
+		<div class="l-kanban-detail__header">
+			<a class="c-btn c-btn--outline" th:href="@{/mypage/task/list}">
+				&laquo; タスクボードへ戻る
+			</a>
+		</div>
+
+		<section class="c-task-detail-card">
+			<p class="c-task-detail-card__date" th:text="${taskDetail.workDate}">2025/10/15</p>
+			<div class="c-task-detail-card__title-row">
+				<h1 class="c-task-detail-card__title" th:text="${taskDetail.title}">API製造</h1>
+				<span class="c-badge" th:classappend="' c-badge--priority-' + ${taskDetail.priority}"
+					th:text="${taskDetail.priority}">高</span>
+			</div>
+
+			<div class="c-task-detail-card__meta">
+				<span class="c-badge c-badge--kind" th:text="${taskDetail.taskKind}">開発</span>
+				<span class="c-badge" th:text="${taskDetail.status}">未着手</span>
+				<span class="c-badge" th:if="${taskDetail.template}" aria-label="テンプレートタスク">テンプレート</span>
+			</div>
+
+			<dl class="c-task-detail-card__list">
+				<div class="c-task-detail-card__row">
+					<dt>予定時間</dt>
+					<dd th:text="${taskDetail.plannedTime}">09:00 – 12:00</dd>
+				</div>
+				<div class="c-task-detail-card__row">
+					<dt>実績時間</dt>
+					<dd th:text="${taskDetail.actualTime}">-</dd>
+				</div>
+				<div class="c-task-detail-card__row">
+					<dt>説明</dt>
+					<dd th:text="${taskDetail.description}">
+						APIの製造とテストを実施
+					</dd>
+				</div>
+			</dl>
+		</section>
+	</main>
+	<script></script>
+</body>
+
+</html>

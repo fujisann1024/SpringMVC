@@ -1,6 +1,8 @@
 package com.sample.mvcApp.feature.mypage.task.domain.port;
 
+import com.sample.mvcApp.feature.mypage.task.domain.model.aggregate.TaskGroup;
 import com.sample.mvcApp.feature.mypage.task.domain.model.collection.TaskGroupCollectionMap;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.WeekRange;
 
 public interface TaskGroupQuery {
@@ -14,5 +16,12 @@ public interface TaskGroupQuery {
 	 *  */
 	TaskGroupCollectionMap getTaskGroupWeekRange(WeekRange weekRange);
 	
-
+	/** 
+	 * 指定されたタスクグループIDのタスクグループを取得する
+	 * 
+	 * @param taskGroupId タスクグループID
+	 * @return タスクグループ
+	 * 
+	 *  */
+	TaskGroup getTaskGroupById(TaskGroupId taskGroupId);
 }

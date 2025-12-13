@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.sample.mvcApp.common.exception.DomainObjectException;
 import com.sample.mvcApp.feature.mypage.task.adapter.db.helper.TaskGroupDBHelper;
 import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupDto;
+import com.sample.mvcApp.feature.mypage.task.adapter.db.jpadto.TaskGroupKeyDto;
 import com.sample.mvcApp.feature.mypage.task.domain.model.aggregate.TaskGroup;
 import com.sample.mvcApp.feature.mypage.task.domain.model.collection.TaskGroupCollectionMap;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.WeekRange;
 import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupQuery;
 
@@ -50,5 +53,20 @@ public class TaskGroupJdbcDao implements TaskGroupQuery {
 		
 		return TaskGroupCollectionMap.of(taskGroupList);
 		
+	}
+
+	@Override
+	public TaskGroup getTaskGroupById(TaskGroupId taskGroupId) {
+		TaskGroupKeyDto key = TaskGroupKeyDto.builder()
+				.taskGroupId(taskGroupId.groupId())
+				.workYmd(taskGroupId.workYmd())
+				.build();
+		TaskGroupDto dto = em.find(TaskGroupDto.class, key);
+
+		if (dto == null) {
+			throw new DomainObjectException("指定されたタスクが見つかりませんでした");
+		}
+
+		return TaskGroupDBHelper.parseToTaskGroup(dto);
 	}
 }

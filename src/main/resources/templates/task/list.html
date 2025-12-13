@@ -57,8 +57,10 @@
 				<ul class="l-kanban__list">
 					<!-- 1タスク */-->
 					<li th:each="task : ${entry.value}">
-						<article class="c-kanban-card" th:attr="data-group-id=${task.groupId}">
-
+						<a class="c-kanban-card	c-kanban-card--link" 
+						   th:attr="data-group-id=${task.groupId}"
+						   th:href="@{/mypage/task/detail(groupId=${task.groupId}, workYmd=${#temporals.format(entry.key,'yyyy-MM-dd')})}">
+						   >
 							<h3 class="c-kanban-card__title" th:text="${task.title}">朝活動</h3>
 							<div class="c-kanban-card__time" th:text="${task.startTime} + ' – ' + ${task.endTime}">7:00
 								– 9:00</div>
@@ -66,7 +68,7 @@
 							<span class="c-badge c-badge--kind" th:text="${task.taskKind}">定期作業</span>
 							<span class="c-badge" th:classappend="' c-badge--priority-' + ${task.priority}"
 								th:text="${task.priority}">高</span>
-						</article>
+						</a>
 					</li>
 				</ul>
 				<button class="c-btn c-btn--outline c-btn--block js-open-modal" th:data-date="${entry.key}">
