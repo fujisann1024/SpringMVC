@@ -20,6 +20,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.sample.mvcApp.feature.mypage.task.domain.model.aggregate.TaskGroup;
 import com.sample.mvcApp.feature.mypage.task.domain.model.collection.TaskGroupCollectionMap;
+import com.sample.mvcApp.feature.mypage.task.domain.model.value.TaskGroupId;
 import com.sample.mvcApp.feature.mypage.task.domain.model.value.WeekRange;
 import com.sample.mvcApp.feature.mypage.task.domain.port.TaskGroupQuery;
 
@@ -83,6 +84,32 @@ public class TaskGroupJdbcDaoTest {
 				       .stream().map(gid))
 				.containsExactlyInAnyOrder("TG026A", "TG026B");
 		
+	}
+	
+	@Test
+	@DisplayName("getTaskGroupByIdで想定の結果と一致すること")
+	@DataSet(value = testPath + "Test1_2.xlsx", cleanBefore = true)
+	void getTaskGroupById1() {
+		
+		var taskGroupId = new TaskGroupId("TG022A",LocalDate.of(2025,10,22));
+		
+		TaskGroup tg = dao.getTaskGroupById(taskGroupId);
+		
+		assertAll(
+				() -> assertEquals("TG022A", tg.id().groupId()),
+				() -> assertEquals(LocalDate.of(2025,10,22), tg.id().workYmd()),
+				() -> assertEquals("実装タスクA", tg.title().value()),
+				() -> assertEquals("実装タスクA", tg.title().value()),
+				() -> assertEquals("APIエンドポイント作成", tg.description().get()),
+				() -> assertEquals("WORK", tg.taskTypeCode().get()),
+				() -> assertEquals("高", tg.priority().getLabel()),
+				() -> assertEquals("10:00", tg.plannedTime().get().getStartTimeHHmm()),
+				() -> assertEquals("12:00", tg.plannedTime().get().getEndTimeHHmm()),
+				() -> assertEquals("11:00", tg.actualTime().get().getStartTimeHHmm()),
+				() -> assertEquals("13:00", tg.actualTime().get().getEndTimeHHmm()),
+				() -> assertEquals("進行中", tg.status().getLabel()),
+				() -> assertTrue(tg.template())
+				);
 	}
 
 }
