@@ -50,6 +50,20 @@
 	margin: 0;
 }
 
+.l-kanban-detail {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.l-kanban-detail__header {
+  display: flex;
+  justify-content: flex-start;
+}
+
 
 /* 小画面はカラム幅をやや狭めて見やすく（任意） */
 @media (max-width: 480px) {

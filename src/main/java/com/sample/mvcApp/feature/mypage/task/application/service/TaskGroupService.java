@@ -37,7 +37,7 @@ public class TaskGroupService implements TaskGroupUseCase {
 	
 	@Autowired
 	TaskGroupQuery taskGroupQuery;
-	
+	     
 	@Autowired
 	SysdateProps props;
 	
