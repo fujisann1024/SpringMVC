@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{_layouts/default :: layout(~{::title}, ~{::main}, 'logout' , ~{::script})}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>ログアウト</title>
+</head>
+
+<body>
+	<main>
+		<section class="c-card">
+			<h1 class="c-card__title">ログアウトしました</h1>
+			<p class="c-card__description">ご利用ありがとうございました。</p>
+			<div class="c-form__actions">
+				<a class="c-button c-button--primary" th:href="@{/}">ログイン画面へ</a>
+			</div>
+		</section>
+	</main>
+	<script></script>
+</body>
+
+</html>

@@ -7,7 +7,7 @@
 	<div class="l-header__inner">
 	    <a class="c-brand" th:href="@{/}">MyApp</a>
 	    <nav class="c-nav" aria-label="Primary">
-	      <ul class="c-nav__list">
+	      <liul class="c-nav__list">
 	        <li class="c-nav__item">
 	          <a class="c-nav__link" th:href="@{/}"
 	             th:classappend="${active}=='home' ? ' is-current' : null"
@@ -28,6 +28,13 @@
 	             th:classappend="${active}=='contact' ? ' is-current' : null"
 	             th:attrappend="aria-current=${active}=='contact' ? 'page' : null">Contact</a>
 	        </li>
+			<li sec:authorize="isAuthenticated()">
+				<button type="button"
+				        class="c-button c-button--secondary"
+				        onclick="postLogout()">
+				  ログアウト
+				</button>
+			</li>
 	      </ul>
 	    </nav>
 	  </div>
