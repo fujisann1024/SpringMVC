@@ -36,10 +36,16 @@
   /**ボタン*/
   --btn-bg: var(--white0);
   --btn-bg-primary: var(--sky-500);
+  --btn-bg-secondary: var(--sky-100);
   --btn-fg: var(--text-default);
   --btn-fg-primary: var(--sky-100);
+  --btn-fg-secondary: var(--sky-900);
   --btn-border: var(--sky-300);
+  --btn-border-primary: none;
+  --btn-border-secondary: var(--sky-300);
   --btn-shadow: 0 1px 0 rgba(0,0,0,.02);
+  --btn-shadow-primary: 0 4px 8px rgba(14,165,233,.2);
+  --btn-shadow-secondary: 0 1px 0 rgba(0,0,0,.02);
   --btn-hover-bg: var(--sky-100);
 
   /**カード*/

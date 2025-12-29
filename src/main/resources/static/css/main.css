@@ -19,3 +19,10 @@
   /*改行で高さが広がるのを防ぐ*/
   white-space: nowrap !important;
 }
+
+/* 子要素の中央寄せ*/
+.u-center-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

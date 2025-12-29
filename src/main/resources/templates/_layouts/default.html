@@ -2,18 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, content, active, scripts)">
 <head>
 	<meta charset="UTF-8">
-	<!-- CSRF: JSから参照するための埋め込み -->
-	<th:block sec:authorize="isAuthenticated()">
-	  <meta name="_csrf" th:content="${_csrf.token}" />
-	  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
-	</th:block>
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
 	<title th:replace="${title}">App</title>
 	<link rel="stylesheet" th:href="@{/css/reset.css}">
 	<link rel="stylesheet" th:href="@{/css/theme/theme.css}">
 	<link rel="stylesheet" th:href="@{/css/layout/header.css}" />
 	<link rel="stylesheet" th:href="@{/css/layout/kanban.css}" />
+	<link rel="stylesheet" th:href="@{/css/module/card.css}" />
 	<link rel="stylesheet" th:href="@{/css/module/nav.css}" />
 	<link rel="stylesheet" th:href="@{/css/module/button.css}" />
+	<link rel="stylesheet" th:href="@{/css/module/form.css}" />
 	<link rel="stylesheet" th:href="@{/css/module/modal.css}" />
 	<link rel="stylesheet" th:href="@{/css/module/modal-form.css}" />
 	<link rel="stylesheet" th:href="@{/css/module/kanban-card.css}" />

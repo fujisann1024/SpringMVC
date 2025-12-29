@@ -17,6 +17,7 @@ public class MainController {
 	
 	/**
 	 * ログアウト完了画面の表示
+	 * Spring Securityのログアウト設定により、ログアウト完了時に自動的にこの画面にリダイレクトされる。
 	 * @return ログアウト完了画面
 	 */
 	@GetMapping("/logout-success")
@@ -26,7 +27,8 @@ public class MainController {
 	
 	/**
 	 * セッションタイムアウト画面の表示
-	 * @return
+	 * Spring Securityのセッション管理設定により、セッションタイムアウト時に自動的にこの画面にリダイレクトされる。
+	 * @return セッションタイムアウト画面
 	 */
 	@GetMapping("/session-timeout")
 	public String sessionTimeout() {
