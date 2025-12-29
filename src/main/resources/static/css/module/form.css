@@ -1,0 +1,76 @@
+
+.c-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.c-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.c-form__label {
+  color: var(--text-default);
+  font-weight: 700;
+}
+
+.c-form__input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text-default);
+  box-shadow: inset 0 1px 0 rgba(0,0,0,.02);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+/* */
+.c-form__input:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--focus-ring), transparent 70%);
+}
+
+.c-form__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-alert {
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+
+.c-alert--error {
+  background: #fef2f2;
+  border-color: #fecdd3;
+  color: #b91c1c;
+}
+
+.c-status {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.c-status--success {
+  background: var(--sky-100);
+  color: var(--sky-700);
+}
+
+.c-status--warning {
+  background: #fff4e5;
+  color: #b45309;
+}

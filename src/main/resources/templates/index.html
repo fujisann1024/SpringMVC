@@ -7,8 +7,37 @@
 	<title>TOP画面</title>
 
 <body>
-	<main>
-	<div>TOP画面</div>	
+	<main class="u-center-child">
+		<section class="c-card c-card--login">
+			<h1 class="c-card__title">ログイン</h1>
+			<p class="c-card__description">ユーザー名（Eメール）とパスワードを入力してください。</p>
+
+			<div th:if="${showError}" class="c-alert c-alert--error">
+				ユーザー名またはパスワードが正しくありません。
+			</div>
+
+			<form th:action="@{/login}" method="post" class="c-form">
+				<div class="c-form__field">
+					<label class="c-form__label" for="username">ユーザー名</label>
+					<input class="c-form__input" type="text" id="username" name="username" required autofocus>
+				</div>
+				<div class="c-form__field">
+					<label class="c-form__label" for="password">パスワード</label>
+					<input class="c-form__input" type="password" id="password" name="password" required>
+				</div>
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				<div class="c-form__actions">
+					<button class="c-btn c-btn--outline--primaly" type="submit">ログイン</button>
+				</div>
+
+				<p class="c-card__description">初めてご利用の方は新規会員登録へ進んでください。</p>
+
+				<div class="c-form__actions">
+					<a class="c-btn c-btn--outline--primaly" th:href="@{/register/create}">会員登録へ</a>
+				</div>
+			</form>
+		</section>
+
 	</main>
 	<script></script>
 </body>

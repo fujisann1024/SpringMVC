@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{_layouts/default :: layout(~{::title}, ~{::main}, 'main' , ~{::script})}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>メイン画面</title>
+</head>
+
+<body>
+	<main class="l-home">
+		<section class="l-home__main">
+			<h1 class="l-home__heading">メイン画面</h1>
+			<p class="l-home__description">ログインが完了しました。</p>
+			<a class="c-btn" th:href="@{/mypage/task/list}">タスク一覧へ</a>
+		</section>
+	</main>
+	<script></script>
+</body>
+
+</html>
